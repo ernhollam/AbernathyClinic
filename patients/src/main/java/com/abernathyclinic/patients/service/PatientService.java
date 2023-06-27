@@ -33,7 +33,7 @@ public class PatientService {
     @Transactional
     public Patient createPatient(Patient patient) {
         if (patientRepository.findByFamilyAndGivenAndDob(patient.getFamily(), patient.getGiven(), patient.getDob()).isPresent()) {
-            String alreadyExistsErrorMessage = "Patient " + patient.getFamily() + " " + patient.getGiven() + ", born the " + patient.getDob() + " already exists.";
+            String alreadyExistsErrorMessage = "Patient " + patient.getFamily() + " " + patient.getGiven() + ", born " + patient.getDob() + " already exists.";
             log.error(alreadyExistsErrorMessage);
             throw new AlreadyExistsException(alreadyExistsErrorMessage);
         }
@@ -69,7 +69,7 @@ public class PatientService {
             return patientRepository.save(patient);
         } else {
             String patientNotFoundErrorMessage = "Patient " + patient.getFamily() + " " + patient.getGiven()
-                    + " born the " + patient.getDob() + " does not exist.";
+                    + " born " + patient.getDob() + " does not exist.";
             log.error(patientNotFoundErrorMessage);
             throw new PatientNotFoundException(patientNotFoundErrorMessage);
         }
