@@ -7,8 +7,8 @@ CREATE TABLE patients (
     patient_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     family VARCHAR(50) NOT NULL,
     given VARCHAR(50) NOT NULL,
-    date_of_birth DATE NOT NULL,
-    gender VARCHAR(1),
+    dob DATE NOT NULL,
+    sex VARCHAR(1),
     address VARCHAR(100),
     phone VARCHAR(50)
 );
