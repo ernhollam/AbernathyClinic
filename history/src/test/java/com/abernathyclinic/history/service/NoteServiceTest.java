@@ -121,6 +121,6 @@ class NoteServiceTest {
         when(noteRepository.existsById(any(String.class))).thenReturn(true);
         String idBeforeDeletion = note.getId();
         noteService.deleteNoteById(idBeforeDeletion);
-        assertTrue(noteService.getNoteById(idBeforeDeletion).isEmpty());
+        verify(noteRepository, times(1)).deleteById(any(String.class));
     }
 }
