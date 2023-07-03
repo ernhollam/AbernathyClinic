@@ -1,7 +1,10 @@
 package com.abernathyclinic.history.service;
 
+import com.abernathyclinic.history.bean.PatientBean;
 import com.abernathyclinic.history.exception.NoteNotFoundException;
+import com.abernathyclinic.history.exception.PatientNotFoundException;
 import com.abernathyclinic.history.model.Note;
+import com.abernathyclinic.history.proxy.PatientProxy;
 import com.abernathyclinic.history.repository.NoteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,11 +37,14 @@ class NoteServiceTest {
     private NoteService noteService;
     @MockBean
     private NoteRepository noteRepository;
+    @MockBean
+    private PatientProxy patientProxy;
 
     private Note note;
     private Note otherNote;
     private Note samePatientNote;
     private List<Note> notes;
+    private PatientBean patient;
 
     @BeforeEach
     void setUp() {
@@ -45,17 +52,26 @@ class NoteServiceTest {
         otherNote = new Note("NOTE002", 2, "Patient: TestBorderline Practitioner's notes/recommendations: Patient states that they are feeling a great deal of stress at work Patient also complains that their hearing seems Abnormal as of late");
         samePatientNote = new Note("NOTE003", 1, "Patient: TestNone Practitioner's notes/recommendations: Patient states that they are 'feeling very strong'");
         notes = List.of(note, otherNote, samePatientNote);
+        patient = new PatientBean(1, "TestNone", "Test", LocalDate.of(1966, 12, 31), "F", "1 Brookside St", "100-222-3333");
     }
 
     @Test
     @DisplayName("Registering new note with valid information should save note to database")
     void createNote_shouldCreate_newNote() {
-        when(noteRepository.save(any(Note.class))).thenReturn(note);
+        when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
+        when(noteRepository.insert(any(Note.class))).thenReturn(note);
 
         note = noteService.createNote(note);
 
-        verify(noteRepository, times(1)).save(any(Note.class));
+        verify(noteRepository, times(1)).insert(any(Note.class));
         assertThat(note).isNotNull();
+    }
+
+    @Test
+    @DisplayName("Adding a note to a patient who does not exist should throw an error")
+    void createNote_shouldThrow_patientNotFoundException() {
+        when(patientProxy.getPatientById(any(Integer.class))).thenReturn(null);
+        assertThrows(PatientNotFoundException.class, () -> noteService.createNote(note));
     }
 
     @Test
@@ -89,20 +105,31 @@ class NoteServiceTest {
     @Test
     @DisplayName("Updating note which does not exist should throw NoteNotFoundException")
     void updateNote_whoDoesNotExist_shouldThrow_NoteNotFoundException() {
-        when(noteRepository.existsById(any(String.class))).thenReturn(false);
+        when(noteRepository.findById(any(String.class))).thenReturn(Optional.empty());
         assertThrows(NoteNotFoundException.class, () -> noteService.updateNote(note));
+    }
+
+    @Test
+    @DisplayName("updateNote should throw PatientNotFoundException")
+    void updateNote_shouldThrow_PatientNotFoundException() {
+        when(noteRepository.findById(any(String.class))).thenReturn(Optional.of(note));
+        when(patientProxy.getPatientById(any(Integer.class))).thenReturn(null);
+        assertThrows(PatientNotFoundException.class, () -> noteService.updateNote(note));
     }
 
     @Test
     @DisplayName("Updating existing note should save changes to database")
     void updateNote_whichExists_shouldUpdate_existingNote() {
-        when(noteRepository.existsById(any(String.class))).thenReturn(true);
+        when(noteRepository.findById(any(String.class))).thenReturn(Optional.of(note));
+        when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
         String newContent = "this is a new content for the test";
         note.setContent(newContent);
         when(noteRepository.save(any(Note.class))).thenReturn(note);
 
         note = noteService.updateNote(note);
 
+        verify(noteRepository, times(1)).findById(any(String.class));
+        verify(patientProxy,times(1)).getPatientById(any(Integer.class));
         verify(noteRepository, times(1)).save(any(Note.class));
         assertThat(note).isNotNull();
         assertEquals(newContent, note.getContent());
@@ -118,9 +145,16 @@ class NoteServiceTest {
     @Test
     @DisplayName("Deleting existing note should delete them from database")
     void deleteNote() {
-        when(noteRepository.existsById(any(String.class))).thenReturn(true);
+        when(noteRepository.findById(any(String.class))).thenReturn(Optional.of(note));
         String idBeforeDeletion = note.getId();
         noteService.deleteNoteById(idBeforeDeletion);
         verify(noteRepository, times(1)).deleteById(any(String.class));
+    }
+
+    @Test
+    @DisplayName("Deleting note which does not exist should throw NoteNotFoundException")
+    void deleteNote_whichDoesNotExist_shouldThrow_NoteNotFoundException() {
+        when(noteRepository.findById(any(String.class))).thenReturn(Optional.empty());
+        assertThrows(NoteNotFoundException.class, () -> noteService.deleteNoteById(note.getId()));
     }
 }
