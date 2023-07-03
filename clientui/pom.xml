@@ -13,10 +13,11 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>clientui</name>
 	<description>Web interface for Abernathy Clininc&apos;s Mediscreen solution</description>
-	<properties>
-		<java.version>17</java.version>
-		<spring-cloud.version>2021.0.7</spring-cloud.version>
-	</properties>
+    <properties>
+        <java.version>17</java.version>
+        <spring-cloud.version>2021.0.7</spring-cloud.version>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
