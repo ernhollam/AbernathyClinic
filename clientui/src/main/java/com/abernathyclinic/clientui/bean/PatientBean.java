@@ -32,4 +32,17 @@ public class PatientBean {
 	private String    address;
 	@Pattern(regexp = "^([0-9]{3}-[0-9]{3}-[0-9]{4})?$", message = "Phone number must be in 123-456-7890 format")
 	private String    phone;
+
+	@Override
+	public String toString() {
+		return "{\n" +
+				"id = " + id + ",\n "+
+				"family = \"" + family + "\",\n "+
+				"given =\"" + given + "\",\n "+
+				"dob = \"" + dob + "\",\n "+
+				"sex = \"" + (sex != null ? sex : "") + "\",\n "+
+				"address = \"" + (address != null ? address : "") + "\",\n "+
+				"phone = \"" + (phone != null ? phone : "") + "\"\n "+
+				"}";
+	}
 }
