@@ -37,6 +37,7 @@ public class PatientService {
             log.error(alreadyExistsErrorMessage);
             throw new AlreadyExistsException(alreadyExistsErrorMessage);
         }
+        log.debug("Saving new patient " + toString(patient));
         return patientRepository.save(patient);
     }
 
@@ -65,11 +66,12 @@ public class PatientService {
     @Transactional
     public Patient updatePatient(Patient patient) {
         Assert.notNull(patient, "Please provide a Patient to update");
+        String patientString = toString(patient);
         if (patientRepository.existsById(patient.getId())) {
+            log.debug("Updating patient " + patientString);
             return patientRepository.save(patient);
         } else {
-            String patientNotFoundErrorMessage = "Patient " + patient.getFamily() + " " + patient.getGiven()
-                    + " born " + patient.getDob() + " does not exist.";
+            String patientNotFoundErrorMessage = "Patient " + patientString + " does not exist.";
             log.error(patientNotFoundErrorMessage);
             throw new PatientNotFoundException(patientNotFoundErrorMessage);
         }
@@ -83,13 +85,23 @@ public class PatientService {
     @Transactional
     public void deletePatient(Patient patient) {
         Assert.notNull(patient, "Patient must be provided.");
+        String patientString = toString(patient);
         if (patientRepository.existsById(patient.getId())) {
             patientRepository.delete(patient);
+            log.debug("Deleted patient " + patientString);
         } else {
-            String deleteErrorMessage = "Patient " + patient.getFamily() + " " + patient.getGiven()
-                    + " born the " + patient.getDob() + " does not exist.";
+            String deleteErrorMessage = "Patient " + patientString + " does not exist.";
             log.error(deleteErrorMessage);
             throw new PatientNotFoundException(deleteErrorMessage);
         }
+    }
+
+    /**
+     * Returns String containing patient's family and given name and birthday.
+     * @param patient Patient to retrieve information for
+     * @return string with family and given name + birthday
+     */
+    public String toString(Patient patient) {
+        return patient.getFamily() + " " + patient.getGiven() + ", born the " + patient.getDob();
     }
 }
