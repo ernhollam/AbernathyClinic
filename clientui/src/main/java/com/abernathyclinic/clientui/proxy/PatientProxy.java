@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.validation.Valid;
 import java.util.List;
 
-@FeignClient(name = "patients", url = "http://localhost:8081")
+@FeignClient(name = "patients", url = "${patients.url}")
 public interface PatientProxy {
 	@PostMapping("/patient")
 	PatientBean createPatient(@Valid @RequestBody PatientBean patient);
