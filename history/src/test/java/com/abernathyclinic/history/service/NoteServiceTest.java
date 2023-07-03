@@ -103,6 +103,29 @@ class NoteServiceTest {
     }
 
     @Test
+    @DisplayName("getPatientHistory should return all notes with given patient ID")
+    void getPatientHistory() {
+        when(patientProxy.getPatientById(patient.getId())).thenReturn(patient);
+        when(noteRepository.findAllByPatId(patient.getId())).thenReturn(List.of(note, samePatientNote));
+        List<Note> result = noteService.getPatientHistory(patient.getId());
+        assertTrue(result.contains(note));
+        assertTrue(result.contains(samePatientNote));
+    }
+
+    @Test
+    @DisplayName("getPatientHistory should throw IllegalArgumentException")
+    void getPatientHistory_shouldThrow_IllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> noteService.getPatientHistory(null));
+    }
+
+    @Test
+    @DisplayName("getPatientHistory should throw PatientNotFoundException")
+    void getPatientHistory_shouldThrow_PatientNotFoundException() {
+        when(patientProxy.getPatientById(any(Integer.class))).thenReturn(null);
+        assertThrows(PatientNotFoundException.class, () -> noteService.getPatientHistory(patient.getId()));
+    }
+
+    @Test
     @DisplayName("Updating note which does not exist should throw NoteNotFoundException")
     void updateNote_whoDoesNotExist_shouldThrow_NoteNotFoundException() {
         when(noteRepository.findById(any(String.class))).thenReturn(Optional.empty());

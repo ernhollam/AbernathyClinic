@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface NoteRepository extends MongoRepository<Note, String> {
-    List<Note> findByPatId(Integer patId);
+    List<Note> findAllByPatId(Integer patId);
 }

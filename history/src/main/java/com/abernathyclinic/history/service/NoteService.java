@@ -24,6 +24,8 @@ public class NoteService {
         this.patientProxy = patientProxy;
     }
 
+    private final String genericNotEmptyIDMessage = "The provided ID should not be empty";
+
     public Note createNote(Note note) {
         if (patientExists(note.getPatId())) {
             return noteRepository.insert(note);
@@ -31,12 +33,20 @@ public class NoteService {
         throw new PatientNotFoundException("Patient with the provided ID " + note.getPatId() + " was not found");
     }
 
+    public List<Note> getPatientHistory(Integer patientId) {
+        Assert.notNull(patientId, genericNotEmptyIDMessage);
+        if (patientExists(patientId)) {
+            return noteRepository.findAllByPatId(patientId);
+        }
+        throw new PatientNotFoundException("Patient with the provided ID " + patientId + " was not found");
+    }
+
     public List<Note> getNotes() {
         return noteRepository.findAll();
     }
 
     public Optional<Note> getNoteById(String noteId) {
-        Assert.notNull(noteId, "The provided ID should not be empty");
+        Assert.notNull(noteId, genericNotEmptyIDMessage);
         return noteRepository.findById(noteId);
     }
 
@@ -51,7 +61,7 @@ public class NoteService {
     }
 
     public void deleteNoteById(String noteId) {
-        Assert.notNull(noteId, "The provided ID should not be empty");
+        Assert.notNull(noteId, genericNotEmptyIDMessage);
         if (noteRepository.findById(noteId).isEmpty()) {
             throw new NoteNotFoundException("Note with the given ID was not found.");
         }
