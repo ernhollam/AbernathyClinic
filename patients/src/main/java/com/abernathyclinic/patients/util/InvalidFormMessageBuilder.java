@@ -5,7 +5,7 @@ import org.springframework.validation.Errors;
 
 public class InvalidFormMessageBuilder {
 
-    public static String buildErrorMessage(Errors errors) throws InvalidFormException {
+    public static void buildErrorMessage(Errors errors) throws InvalidFormException {
         StringBuilder errorMessage = new StringBuilder();
 
         errors.getFieldErrors().forEach(error -> errorMessage.append(error.getField()).append(", "));
