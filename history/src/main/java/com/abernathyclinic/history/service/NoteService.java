@@ -51,18 +51,18 @@ public class NoteService {
 
     public Note updateNote(Note note) {
         if (noteRepository.findById(note.getId()).isEmpty()) {
-            throw new NoteNotFoundException("Note with the given ID was not found.");
+            throw new NoteNotFoundException("Note with the given ID " + note.getId() + " was not found.");
         }
         if (patientExists(note.getPatId())) {
             return noteRepository.save(note);
         }
-        throw new PatientNotFoundException("Patient with the given ID was not found.");
+        throw new PatientNotFoundException("Patient with the provided ID " + note.getPatId() + " was not found");
     }
 
     public void deleteNoteById(String noteId) {
         Assert.notNull(noteId, genericNotEmptyIDMessage);
         if (noteRepository.findById(noteId).isEmpty()) {
-            throw new NoteNotFoundException("Note with the given ID was not found.");
+            throw new NoteNotFoundException("Note with the given ID " + noteId + " was not found.");
         }
         noteRepository.deleteById(noteId);
     }
