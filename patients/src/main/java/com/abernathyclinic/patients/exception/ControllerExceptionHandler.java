@@ -27,6 +27,13 @@ public class ControllerExceptionHandler {
         return "Illegal argument value:\n" + alreadyExistsException.getMessage();
     }
 
+    @ExceptionHandler(InvalidFormException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public String alreadyExistsException(InvalidFormException invalidFormException) {
+        log.error("Form has some incorrect fields.", invalidFormException);
+        return "Form has some incorrect fields.\n" + invalidFormException.getMessage();
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String returnMessage(Exception exception) {
