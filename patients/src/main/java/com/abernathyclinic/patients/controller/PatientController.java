@@ -2,10 +2,11 @@ package com.abernathyclinic.patients.controller;
 
 
 import com.abernathyclinic.patients.exception.AlreadyExistsException;
+import com.abernathyclinic.patients.exception.InvalidFormException;
 import com.abernathyclinic.patients.exception.PatientNotFoundException;
 import com.abernathyclinic.patients.model.Patient;
 import com.abernathyclinic.patients.service.PatientService;
-import com.abernathyclinic.patients.util.FieldValidationErrorMessageBuilder;
+import com.abernathyclinic.patients.util.InvalidFormMessageBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -32,9 +33,9 @@ public class PatientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Patient createPatient(@Valid @RequestBody Patient patient, Errors errors) throws AlreadyExistsException {
+    public Patient createPatient(@Valid @RequestBody Patient patient, Errors errors) throws AlreadyExistsException, InvalidFormException {
         if (errors.hasErrors()) {
-            FieldValidationErrorMessageBuilder.buildErrorMessage(errors);
+            InvalidFormMessageBuilder.buildErrorMessage(errors);
         }
 
         return patientService.createPatient(patient);
@@ -52,12 +53,12 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public Patient updatePatient(@PathVariable String id, @Valid @RequestBody Patient patient, Errors errors) throws PatientNotFoundException {
+    public Patient updatePatient(@PathVariable String id, @Valid @RequestBody Patient patient, Errors errors) throws PatientNotFoundException, InvalidFormException {
         if (patientService.getPatientById(Integer.valueOf(id)).isEmpty()) {
             throw new PatientNotFoundException("Patient with the provided ID does not exist.");
         }
         if (errors.hasErrors()) {
-            FieldValidationErrorMessageBuilder.buildErrorMessage(errors);
+            InvalidFormMessageBuilder.buildErrorMessage(errors);
         }
         return patientService.updatePatient(patient);
     }
