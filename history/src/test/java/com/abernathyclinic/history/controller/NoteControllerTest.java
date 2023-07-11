@@ -26,6 +26,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -33,7 +35,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -78,12 +82,16 @@ public class NoteControllerTest {
         Note newNoteForTest = new Note("NOTE004", 1, "Patient: TestNone Practitioner's notes/recommendations: Patient has it easy");
         when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
         when(noteRepository.insert(any(Note.class))).thenReturn(newNoteForTest);
+        when(noteService.createNote(any(Note.class))).thenReturn(newNoteForTest);
 
         mockMvc.perform(post("/note")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newNoteForTest)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", is(newNoteForTest.getId())))
+                .andExpect(jsonPath("$.patId", is(newNoteForTest.getPatId())))
+                .andExpect(jsonPath("$.content", is(newNoteForTest.getContent())));
     }
 
     @Test
@@ -106,10 +114,14 @@ public class NoteControllerTest {
     void getPatientHistorySuccessful() throws Exception {
         when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
         when(noteRepository.findAllByPatId(any(Integer.class))).thenReturn(testNonesNotes);
+        when(noteService.getPatientHistory(any(Integer.class))).thenReturn(testNonesNotes);
 
         mockMvc.perform(get("/note/patient/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(note.getId())))
+                .andExpect(jsonPath("$[1].id", is(samePatientNote.getId())));
     }
 
     @Test
@@ -129,7 +141,11 @@ public class NoteControllerTest {
 
         mockMvc.perform(get("/note"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].id", is(note.getId())))
+                .andExpect(jsonPath("$[1].id", is(otherNote.getId())))
+                .andExpect(jsonPath("$[2].id", is(samePatientNote.getId())));
     }
 
     @Test
@@ -139,7 +155,8 @@ public class NoteControllerTest {
 
         mockMvc.perform(get("/note/1"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(note.getId())));
     }
 
     @Test
@@ -152,45 +169,50 @@ public class NoteControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    // TODO
-   /* @Test
+    @Test
     @DisplayName("updateNoteById() should update note")
     void updateNoteTest() throws Exception {
-        Note newNoteForTest = new Note("NOTE004", 1, "Patient: TestNone Practitioner's notes/recommendations: Patient has it easy");
+        String updatedContent = "Patient: Updated Patient Practitioner's notes/recommendations: Patient states that they are 'feeling terrific'";
+        note.setContent(updatedContent);
+        when(noteRepository.findById(anyString())).thenReturn(Optional.ofNullable(note));
         when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
-        when(noteRepository.insert(any(Note.class))).thenReturn(newNoteForTest);
+        when(noteRepository.save(any(Note.class))).thenReturn(note);
+        when(noteService.updateNote(any(Note.class))).thenReturn(note);
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(put("/note/NOTE001")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(newNoteForTest)))
+                        .content(mapper.writeValueAsString(note)))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", is(updatedContent)));
     }
 
     @Test
     @DisplayName("updateNoteById() should return InvalidFormException")
     void updateNote_withInvalidFields_shouldReturn_InvalidFormException() throws Exception {
-        Note noteWithNullPatientId = new Note("NOTE004", null, null);
-        when(noteService.getPatientHistory(patient.getId())).thenReturn(testNonesNotes);
+        note.setContent("");
+        when(noteRepository.findById(anyString())).thenReturn(Optional.ofNullable(note));
         when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
-        when(noteRepository.insert(any(Note.class))).thenReturn(noteWithNullPatientId);
+        when(noteRepository.save(any(Note.class))).thenReturn(note);
+        when(noteService.updateNote(any(Note.class))).thenReturn(note);
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(put("/note/NOTE001")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(mapper.writeValueAsString(noteWithNullPatientId)))
+                        .content(mapper.writeValueAsString(note)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
-    }*/
+    }
 
     @Test
     @DisplayName("deleteNoteById() returns not found status")
     void deleteNoteByIdFails() throws Exception {
         when(noteRepository.findById(anyString())).thenReturn(Optional.empty());
         doThrow(NoteNotFoundException.class).when(noteService).deleteNoteById(anyString());
-            mockMvc.perform(delete("/note/123"))
-                    .andDo(print())
-                    .andExpect(status().isNotFound());
+        mockMvc.perform(delete("/note/123"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
+
     @Test
     @DisplayName("deleteNoteById() successful")
     void deleteNoteByIdSuccessful() throws Exception {

@@ -48,7 +48,7 @@ public class NoteController {
     }
 
     @GetMapping
-    public List<Note> getNotes(){
+    public List<Note> getNotes() {
         return noteService.getNotes();
     }
 
