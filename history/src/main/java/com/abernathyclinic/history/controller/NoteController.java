@@ -24,7 +24,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/note")
+@RequestMapping("/patHistory")
 public class NoteController {
 
     @Autowired

@@ -60,6 +60,7 @@ public class NoteControllerTest {
     private List<Note> allNotes;
     private List<Note> testNonesNotes;
     private ObjectMapper mapper;
+    private final String baseURI = "/patHistory";
 
     @BeforeAll
     public void setObjectMapper() {
@@ -84,7 +85,7 @@ public class NoteControllerTest {
         when(noteRepository.insert(any(Note.class))).thenReturn(newNoteForTest);
         when(noteService.createNote(any(Note.class))).thenReturn(newNoteForTest);
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(post(baseURI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(newNoteForTest)))
                 .andDo(print())
@@ -102,7 +103,7 @@ public class NoteControllerTest {
         when(patientProxy.getPatientById(any(Integer.class))).thenReturn(patient);
         when(noteRepository.insert(any(Note.class))).thenReturn(noteWithNullPatientId);
 
-        mockMvc.perform(post("/note")
+        mockMvc.perform(post(baseURI)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(noteWithNullPatientId)))
                 .andDo(print())
@@ -116,7 +117,7 @@ public class NoteControllerTest {
         when(noteRepository.findAllByPatId(any(Integer.class))).thenReturn(testNonesNotes);
         when(noteService.getPatientHistory(any(Integer.class))).thenReturn(testNonesNotes);
 
-        mockMvc.perform(get("/note/patient/1"))
+        mockMvc.perform(get(baseURI+ "/patient/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -129,7 +130,7 @@ public class NoteControllerTest {
     void getPatientHistoryReturnsPatientNotFoundException() throws Exception {
         when(noteService.getPatientHistory(any(Integer.class))).thenThrow(PatientNotFoundException.class);
 
-        mockMvc.perform(get("/note/patient/155"))
+        mockMvc.perform(get(baseURI + "/patient/155"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -139,7 +140,7 @@ public class NoteControllerTest {
     void getNotesTest() throws Exception {
         when(noteService.getNotes()).thenReturn(allNotes);
 
-        mockMvc.perform(get("/note"))
+        mockMvc.perform(get(baseURI))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
@@ -153,7 +154,7 @@ public class NoteControllerTest {
     void getNoteByIdSuccessful() throws Exception {
         when(noteService.getNoteById(any(String.class))).thenReturn(Optional.ofNullable(note));
 
-        mockMvc.perform(get("/note/1"))
+        mockMvc.perform(get(baseURI + "/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(note.getId())));
@@ -164,7 +165,7 @@ public class NoteControllerTest {
     void getNoteByIdReturnsNoteNotFoundException() throws Exception {
         when(noteService.getNoteById(any(String.class))).thenReturn(Optional.empty());
 
-        mockMvc.perform(get("/note/1"))
+        mockMvc.perform(get(baseURI + "/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -179,7 +180,7 @@ public class NoteControllerTest {
         when(noteRepository.save(any(Note.class))).thenReturn(note);
         when(noteService.updateNote(any(Note.class))).thenReturn(note);
 
-        mockMvc.perform(put("/note/NOTE001")
+        mockMvc.perform(put(baseURI + "/NOTE001")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(note)))
                 .andDo(print())
@@ -196,7 +197,7 @@ public class NoteControllerTest {
         when(noteRepository.save(any(Note.class))).thenReturn(note);
         when(noteService.updateNote(any(Note.class))).thenReturn(note);
 
-        mockMvc.perform(put("/note/NOTE001")
+        mockMvc.perform(put(baseURI + "/NOTE001")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(note)))
                 .andDo(print())
@@ -208,7 +209,7 @@ public class NoteControllerTest {
     void deleteNoteByIdFails() throws Exception {
         when(noteRepository.findById(anyString())).thenReturn(Optional.empty());
         doThrow(NoteNotFoundException.class).when(noteService).deleteNoteById(anyString());
-        mockMvc.perform(delete("/note/123"))
+        mockMvc.perform(delete(baseURI + "/123"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -217,7 +218,7 @@ public class NoteControllerTest {
     @DisplayName("deleteNoteById() successful")
     void deleteNoteByIdSuccessful() throws Exception {
         when(noteRepository.findById(anyString())).thenReturn(Optional.of(note));
-        mockMvc.perform(delete("/note/1"))
+        mockMvc.perform(delete(baseURI + "/1"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
