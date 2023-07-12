@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class NoteBean {
-	private Integer   id;
+	private String   id;
 	@NotNull(message = "You must provide a patient ID")
 	Integer patId;
 	@NotBlank(message = "Notes/recommendations can not be blank")

@@ -21,14 +21,14 @@ public interface HistoryProxy {
     List<NoteBean> getNotes();
 
     @GetMapping("/patHistory/{id}")
-    NoteBean getNoteById(@PathVariable("id") Integer id);
+    NoteBean getNoteById(@PathVariable("id") String id);
 
     @GetMapping("/patHistory/patient/{patientId}")
-    List<NoteBean> getPatientHistory(@PathVariable("id") Integer patientId);
+    List<NoteBean> getPatientHistory(@PathVariable("patientId") Integer patientId);
 
     @PutMapping("/patHistory/{id}")
-    NoteBean updateNote(@PathVariable("id") Integer id, @Valid @RequestBody NoteBean patient);
+    NoteBean updateNote(@PathVariable("id") String id, @Valid @RequestBody NoteBean patient);
 
     @DeleteMapping("/patHistory/{id}")
-    void deleteNote(@PathVariable("id") Integer id);
+    void deleteNote(@PathVariable("id") String id);
 }

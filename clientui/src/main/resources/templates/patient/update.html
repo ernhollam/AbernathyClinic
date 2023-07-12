@@ -6,15 +6,37 @@
 </head>
 <body>
 <nav th:insert="fragments :: navbar"></nav>
+<div class="container h-100 py-2">
+    <ul class="nav nav-pills">
+        <li class="nav-item pill-1">
+            <a class="nav-link active" data-toggle="tab" href="profile" th:href="@{/patient/update/{id}(id=${patient.id})}">Profile</a>
+        </li>
+        <li class="nav-item pill-2">
+            <a class="nav-link" data-toggle="tab" href="history" th:href="@{|/patHistory/${patient.id}|}">History</a>
+        </li>
+    </ul>
 
-<div th:insert="fragments::card_template('Update patient ' + ${patient.family} + ' ' + ${patient.given}, ~{:: .form-content})">
-    <section class="form-content">
-        <form id="update-patient-form" action="#" th:action="@{/patient/update/{id}(id=${patient.id})}" method="post" th:object="${patient}">
-            <div th:replace="fragments::patient-form"></div>
-            <div th:replace="fragments::submit-buttons"></div>
-        </form>
-    </section>
+    <div class="tab-content">
+        <div th:insert="fragments::card_template('Update patient ' + ${patient.family} + ' ' + ${patient.given}, ~{:: .form-content})">
+            <div class="tab-pane fade show active" id="profile" role="tabpanel">Nom prénom
+                <div th:insert="fragments :: alert"></div>
+                <section class="form-content">
+                    <form id="update-patient-form" action="#" th:action="@{/patient/update/{id}(id=${patient.id})}"
+                          method="post" th:object="${patient}">
+                        <div th:replace="fragments::patient-form"></div>
+                        <div th:replace="fragments::submit-buttons"></div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade" id="history" role="tabpanel"
+             th:insert="/note/list :: patientHistory">Notes/recommendations</div>
+    </div>
+
 </div>
+
 
 <footer th:insert="fragments::footer"></footer>
 </body>

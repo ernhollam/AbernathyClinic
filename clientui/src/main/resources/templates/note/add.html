@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="'Add note to patient ' + ${patient.family} + ' ' + ${patient.given}">Add note for patient</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h3 class="text-center display-4 fw-bold mt-2" style="color: #1a8a9f"
+        th:text="'Add note to patient ' + ${patient.family} + ' ' + ${patient.given}">Add note to patient Jane Doe</h3>
+    <form action="#"
+          th:action="@{|/patHistory/${patient.id}/add|}" method="post" th:object="${note}">
+        <div class="form-group">
+            <label for="content">Note/Recommendations:</label>
+            <textarea class="form-control" rows="5" id="content"
+                      th:field="*{content}"></textarea>
+            <div class="text-danger"
+                 th:if="${#fields.hasErrors('content')}"
+                 th:errors="*{content}"></div>
+        </div>
+        <div class="row justify-content-center align-items-center mx-auto col-10">
+            <a class="btn btn-light btn-darken-lg col m-3 text-white"
+               style="background-color: #a4c7ce"
+               th:href="@{|/patHistory/${patient.id}|}">
+                Cancel
+            </a>
+            <input type="submit" class="btn col text-white" style="background-color: #1a8a9f" value="Submit">
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
