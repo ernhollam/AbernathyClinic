@@ -107,7 +107,7 @@ public class HistoryClientController {
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("patient", patient);
 		model.addAttribute("currentPage", "history");
-		return "redirect:/note/list";
+		return "redirect:/patient/" + patient.getId() + "/patHistory";
 	}
 
 	/**
@@ -159,7 +159,7 @@ public class HistoryClientController {
 			model.addAttribute("patient", patient);
 			model.addAttribute("currentPage", "history");
 			// redirect to list of notes page
-			return "redirect:/patient/" + patient.getId() + "/note/list";
+			return "redirect:/patient/" + patient.getId() + "/patHistory";
 		}
 		return "note/add";
 	}
@@ -192,7 +192,7 @@ public class HistoryClientController {
 		// return to NoteBean list
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("currentPage", "history");
-		return "redirect:/note/list";
+		return "redirect:/patient/" + patient.getId() + "/patHistory";
 	}
 
 	/**
