@@ -186,11 +186,11 @@
     <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">
 </div>
 
-<!--Patient form Cancel and submit buttons-->
+<!--Note form Cancel and submit buttons-->
 <div th:fragment="note-submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
     <a class="btn btn-light btn-darken-lg col m-3 text-white"
        style="background-color: #a4c7ce"
-       th:href="@{/patient/${patient.id}/patHistory}">
+       th:href="@{|/patient/${patient.id}/patHistory|}">
         Cancel
     </a>
     <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">
