@@ -18,7 +18,7 @@
 <!--Form-->
 <section class="card-content">
     <div th:insert="fragments :: alert"></div>
-    <input class="form-control" id="search-input" type="text" placeholder="Search..">
+    <input class="form-control" id="patient-search-input" type="text" placeholder="Search patient">
     <br>
     <table class="table table-hover">
         <thead class="text-white mt-2" style="background-color: #1a8a9f">
@@ -42,12 +42,12 @@
             <td th:text="${patient.phone}">100-200-3000</td>
             <td>
                 <div class="d-grid gap-2 d-md-block float-right">
-                    <a th:href="@{/patient/${patient.id}/patHistory/add}"
+                    <a th:href="@{|/patient/${patient.id}/patHistory/add|}"
                        class="btn text-white " style="background-color:#5da1b4">Add note</a>
-                    <a th:href="@{/patient/update/${patient.id}}"
+                    <a th:href="@{|/patient/update/${patient.id}|}"
                        class="btn text-white " style="background-color:#5da1b4">View profile</a>
 
-                    <a th:href="@{/patient/delete/${patient.id}}"
+                    <a th:href="@{|/patient/delete/${patient.id}|}"
                        class="btn text-white " style="background-color:#e96f52">Delete</a>
                 </div>
             </td>
@@ -76,7 +76,7 @@
 <!--jQuery script to search patients list-->
 <script>
 $(document).ready(function(){
-  $("#search-input").on("keyup", function() {
+  $("#patient-search-input").on("keyup", function() {
     var value = $(this).val().toLowerCase();
     $("#patients-list tr").filter(function() {
       $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
