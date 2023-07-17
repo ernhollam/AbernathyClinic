@@ -11,7 +11,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 
-
 <body>
 <!--Navigation bar-->
 <nav class="navbar navbar-expand-lg navbar-light justify-content-end" th:fragment="navbar">
@@ -56,6 +55,22 @@
 <div th:fragment="card_template(card_title, card_body)"
      class="col-8 mx-auto">
     <div class="card">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs ">
+                <li class="nav-item">
+                    <a class="nav-link" href="/patient/update"
+                       th:href="@{/patient/update/{id}(id=${patient.id})}"
+                       th:classappend="${currentPage} == 'profile' ? ' active' : ''"
+                       th:styleappend="${currentPage} == 'profile' ? 'color: #1a8a9f' : 'color: #a4c7ce'">Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/note/list"
+                       th:href="@{/patHistory/{id}(id=${patient.id})}"
+                       th:classappend="${currentPage} == 'history' ? ' active' : ''"
+                       th:styleappend="${currentPage} == 'history' ? 'color: #1a8a9f' : 'color: #a4c7ce'">History</a>
+                </li>
+            </ul>
+        </div>
         <div class="card-body py-4 px-md-4 h-100 m-2">
             <h3 class="text-center display-4 fw-bold mt-2" style="color: #1a8a9f" th:text="${card_title}">Form
                 title</h3>
@@ -149,15 +164,30 @@
              th:errors="*{phone}"></div>
     </div>
 </div>
+
+<!--Note form-->
+<div th:fragment="note-form">
+    <!--Content-->
+    <div class="form-outline mb-4">
+        <h6 class="mb-2 pb-1">Note/recommandations</h6>
+        <textarea type="text" class="form-control md-textarea" rows="5" id="content" required
+                  th:field="*{content}" placeholder="Recommandations for patient"></textarea>
+        <div class="text-danger"
+             th:if="${#fields.hasErrors('content')}"
+             th:errors="*{content}"></div>
+    </div>
+</div>
+
 <!--Cancel and submit buttons-->
 <div th:fragment="submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
     <a class="btn btn-light btn-darken-lg col m-3 text-white"
        style="background-color: #a4c7ce"
-       th:href="@{/patient/list}">
+       th:href="${currentPage} == 'profile' ?  @{/patient/list} : @{|/patHistory/${patient.id}|}">
         Cancel
     </a>
     <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">
 </div>
+
 <!--Footer-->
 <div th:fragment="footer" class="sticky-bottom text-center text-black p-2">
     Mediscreen | <span th:text="${#temporals.format(#temporals.createNow(), 'yyyy')}">2023</span> | &copy; <a
