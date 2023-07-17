@@ -11,7 +11,7 @@
     <section class="form-content">
         <form id="add-patient-form" th:action="@{/patient/add}" method="post" th:object="${patient}">
             <div th:replace="fragments::patient-form"></div>
-            <div th:replace="fragments::submit-buttons"></div>
+            <div th:replace="fragments::patient-submit-buttons"></div>
         </form>
     </section>
 </div>

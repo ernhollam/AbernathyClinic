@@ -14,15 +14,12 @@
 <body>
 <!--Navigation bar-->
 <nav class="navbar navbar-expand-lg navbar-light justify-content-end" th:fragment="navbar">
-    <button class="btn mr-auto ml-2 text-white" style="background-color: #1a8a9f">Mediscreen</button>
+    <button class="btn mr-auto ml-2 text-white" style="background-color: #1a8a9f" href="/patient/list">Mediscreen</button>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse flex-grow-0" id="navbar">
         <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="#">Home</a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="/patient/list" th:href="@{/patient/list}">Patients</a>
             </li>
@@ -63,7 +60,7 @@
                        th:classappend="${currentPage} == 'profile' ? ' active' : ''"
                        th:styleappend="${currentPage} == 'profile' ? 'color: #1a8a9f' : 'color: #a4c7ce'">Profile</a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item" th:if="!${disableHistoryTab}">
                     <a class="nav-link" href="/note/list"
                        th:href="@{/patHistory/{id}(id=${patient.id})}"
                        th:classappend="${currentPage} == 'history' ? ' active' : ''"
@@ -178,11 +175,21 @@
     </div>
 </div>
 
-<!--Cancel and submit buttons-->
-<div th:fragment="submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
+<!--Patient form Cancel and submit buttons-->
+<div th:fragment="patient-submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
     <a class="btn btn-light btn-darken-lg col m-3 text-white"
        style="background-color: #a4c7ce"
-       th:href="${currentPage} == 'profile' ?  @{/patient/list} : @{|/patHistory/${patient.id}|}">
+       th:href="@{/patient/list}">
+        Cancel
+    </a>
+    <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">
+</div>
+
+<!--Patient form Cancel and submit buttons-->
+<div th:fragment="note-submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
+    <a class="btn btn-light btn-darken-lg col m-3 text-white"
+       style="background-color: #a4c7ce"
+       th:href="@{|/patHistory/${patient.id}|}">
         Cancel
     </a>
     <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">

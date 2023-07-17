@@ -22,7 +22,7 @@
         <form action="#"
               th:action="@{|/patHistory/${patient.id}/add|}" method="post" th:object="${note}">
             <div th:replace="fragments :: note-form"></div>
-            <div th:replace="fragments::submit-buttons"></div>
+            <div th:replace="fragments :: note-submit-buttons"></div>
         </form>
     </section>
 </div>
