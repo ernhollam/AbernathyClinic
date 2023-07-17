@@ -20,7 +20,8 @@
 
     <section class="form-content">
         <form action="#"
-              th:action="@{|/patHistory/${patient.id}/add|}" method="post" th:object="${note}">
+              th:action="@{|/patient/${patient.id}/patHistory/add|}" method="post" th:object="${note}">
+            <input th:field="*{patId}" type="hidden" class="form-control" id="patientId" th:value="${patient.id}">
             <div th:replace="fragments :: note-form"></div>
             <div th:replace="fragments :: note-submit-buttons"></div>
         </form>

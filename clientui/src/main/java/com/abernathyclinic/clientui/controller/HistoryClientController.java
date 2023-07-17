@@ -13,7 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -32,7 +31,7 @@ public class HistoryClientController {
 	 * @param model holder for context data to be passed from controller to the view, contains list of notes
 	 * @return Patient history, list of patients if patient was not found
 	 */
-	@GetMapping("/patHistory/{patientId}")
+	@GetMapping("/patient/{patientId}/patHistory")
 	public String showPatientHistory(@PathVariable("patientId") Integer patientId, Model model,
 			RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);
@@ -52,7 +51,7 @@ public class HistoryClientController {
 	 * @param model  holder for context data to be passed from controller to the view, contains note to be updated
 	 * @return update note page if error, list of notes otherwise
 	 */
-	@GetMapping("/patHistory/{patientId}/update/{noteId}")
+	@GetMapping("/patient/{patientId}/patHistory/update/{noteId}")
 	public String showUpdateNoteForm(@PathVariable("patientId") Integer patientId,
 			@PathVariable("noteId") String noteId, Model model, RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);
@@ -82,7 +81,7 @@ public class HistoryClientController {
 	 * @param redirectAttributes redirection attributes, contains success popup
 	 * @return list of notes if update is successful, update note page otherwise
 	 */
-	@PostMapping("/patHistory/{patientId}/update/{noteId}")
+	@PostMapping("/patient/{patientId}/patHistory/update/{noteId}")
 	public String updateNote(@PathVariable("patientId") Integer patientId, @PathVariable("noteId") String noteId,
 			@Valid NoteBean note,
 			BindingResult result, Model model, RedirectAttributes redirectAttributes) {
@@ -117,7 +116,7 @@ public class HistoryClientController {
 	 * @param note note to be added
 	 * @return add note page
 	 */
-	@GetMapping("/patHistory/{patientId}/add")
+	@GetMapping("/patient/{patientId}/patHistory/add")
 	public String showAddNoteForm(@PathVariable("patientId") Integer patientId, NoteBean note, Model model) {
 		note.setPatId(patientId);
 		model.addAttribute("note", note);
@@ -135,10 +134,11 @@ public class HistoryClientController {
 	 * @param redirectAttributes redirection attributes, contains success popup
 	 * @return add note page if an error occurred, list of notes otherwise
 	 */
-	@PostMapping("/patHistory/{patientId}/add")
-	public String addNoteForPatient(@PathVariable("patientId") Integer patientId, @Valid @RequestBody NoteBean note,
+	@PostMapping("/patient/{patientId}/patHistory/add")
+	public String addNoteForPatient(@PathVariable("patientId") Integer patientId, @Valid NoteBean note,
 			BindingResult result, Model model, RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);
+		model.addAttribute("currentPage", "history");
 		if (patient == null) {
 			return "patient/list";
 		}
@@ -156,9 +156,10 @@ public class HistoryClientController {
 						"Error while trying to add note " + note.getContent() + ":\n" + exception.getMessage());
 			}
 			model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
+			model.addAttribute("patient", patient);
 			model.addAttribute("currentPage", "history");
 			// redirect to list of notes page
-			return "redirect:/note/list";
+			return "redirect:/patient/" + patient.getId() + "/note/list";
 		}
 		return "note/add";
 	}
@@ -171,7 +172,7 @@ public class HistoryClientController {
 	 * @param redirectAttributes redirection attributes, contains success or failure popup
 	 * @return list of notes page
 	 */
-	@GetMapping("/patHistory/{patientId}/delete/{noteId}")
+	@GetMapping("/patient/{patientId}/patHistory/delete/{noteId}")
 	public String deletePatient(@PathVariable("patientId") Integer patientId, @PathVariable("noteId") String noteId,
 			Model model, RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);

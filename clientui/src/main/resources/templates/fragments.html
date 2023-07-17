@@ -48,6 +48,7 @@
             </button>
     </div>
 </div>
+
 <!--Card template-->
 <div th:fragment="card_template(card_title, card_body)"
      class="col-8 mx-auto">
@@ -62,7 +63,7 @@
                 </li>
                 <li class="nav-item" th:if="!${disableHistoryTab}">
                     <a class="nav-link" href="/note/list"
-                       th:href="@{/patHistory/{id}(id=${patient.id})}"
+                       th:href="@{|/patient/${patient.id}/patHistory|}"
                        th:classappend="${currentPage} == 'history' ? ' active' : ''"
                        th:styleappend="${currentPage} == 'history' ? 'color: #1a8a9f' : 'color: #a4c7ce'">History</a>
                 </li>
@@ -167,7 +168,7 @@
     <!--Content-->
     <div class="form-outline mb-4">
         <h6 class="mb-2 pb-1">Note/recommandations</h6>
-        <textarea type="text" class="form-control md-textarea" rows="5" id="content" required
+        <textarea type="text" class="form-control md-textarea" rows="5" id="content" name="content" required
                   th:field="*{content}" placeholder="Recommandations for patient"></textarea>
         <div class="text-danger"
              th:if="${#fields.hasErrors('content')}"
@@ -189,7 +190,7 @@
 <div th:fragment="note-submit-buttons" class="row justify-content-center align-items-center mx-auto col-10">
     <a class="btn btn-light btn-darken-lg col m-3 text-white"
        style="background-color: #a4c7ce"
-       th:href="@{|/patHistory/${patient.id}|}">
+       th:href="@{/patient/${patient.id}/patHistory}">
         Cancel
     </a>
     <input type="submit" class="btn col m-3 text-white" style="background-color: #1a8a9f" value="Submit">
