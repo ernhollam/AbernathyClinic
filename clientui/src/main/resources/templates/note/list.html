@@ -35,11 +35,13 @@
             </td>
         </tr>
         <tr>
-            <td colspan="6">
-                <div th:if="${patHistory.isEmpty()}" class="alert alert-info text-center">There are no notes yet.
+            <td>
+                <div th:if="${#lists.isEmpty(patHistory)}" class="alert alert-info text-center">There are no notes yet.
                 </div>
             </td>
-            <td>
+        </tr>
+        <tr>
+            <td colspan="2" class="align-center">
                 <a th:href="@{|/patHistory/${patient.id}/add|}" class="btn col text-white" style="background-color: #1a8a9f">Add
                     new note</a>
             </td>
