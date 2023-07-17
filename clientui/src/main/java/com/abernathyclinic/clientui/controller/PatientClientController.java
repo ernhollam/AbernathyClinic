@@ -3,6 +3,7 @@ package com.abernathyclinic.clientui.controller;
 import com.abernathyclinic.clientui.bean.PatientBean;
 import com.abernathyclinic.clientui.exception.AlreadyExistsException;
 import com.abernathyclinic.clientui.exception.PatientNotFoundException;
+import com.abernathyclinic.clientui.proxy.HistoryProxy;
 import com.abernathyclinic.clientui.proxy.PatientProxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,9 +20,12 @@ import javax.validation.Valid;
 public class PatientClientController {
     @Autowired
     private final PatientProxy patientProxy;
+    @Autowired
+    private final HistoryProxy historyProxy;
 
-    public PatientClientController(PatientProxy patientProxy) {
+    public PatientClientController(PatientProxy patientProxy, HistoryProxy historyProxy) {
         this.patientProxy = patientProxy;
+        this.historyProxy = historyProxy;
     }
 
     /**
@@ -51,6 +55,7 @@ public class PatientClientController {
             return "patient/update";
         }
         redirectAttributes.addFlashAttribute("error", "Patient with ID " + id + " does not exist.");
+        model.addAttribute("patHistory", historyProxy.getPatientHistory(id));
         return "redirect:/patient/list";
     }
 
@@ -82,6 +87,7 @@ public class PatientClientController {
             redirectAttributes.addFlashAttribute("error", "Error while trying to update patient " + patient.getFamily() + " " + patient.getGiven() + ":\n" + notFoundException.getMessage());
         }
         model.addAttribute("patients", patientProxy.getPatients());
+        model.addAttribute("patHistory", historyProxy.getPatientHistory(id));
         return "redirect:/patient/list";
     }
 
@@ -143,6 +149,7 @@ public class PatientClientController {
         }
         // return to PatientBean list
         model.addAttribute("patients", patientProxy.getPatients());
+        model.addAttribute("patHistory", historyProxy.getPatientHistory(id));
         return "redirect:/patient/list";
     }
 

@@ -65,6 +65,7 @@ public class HistoryClientController {
         }
         // return to patient profile if note was not found
         redirectAttributes.addFlashAttribute("error", "Note with ID " + noteId + " does not exist.");
+        model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
         return "redirect:/note/list";
     }
 
@@ -144,6 +145,7 @@ public class HistoryClientController {
             } catch (Exception exception) {
                 redirectAttributes.addFlashAttribute("error", "Error while trying to add note " + note.getContent() + ":\n" + exception.getMessage());
             }
+            model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
             // redirect to list of notes page
             return "redirect:/note/list";
         }
@@ -175,7 +177,7 @@ public class HistoryClientController {
             redirectAttributes.addFlashAttribute("error", "Note with ID " + noteId + " does not exist.");
         }
         // return to NoteBean list
-        model.addAttribute("notes", historyProxy.getPatientHistory(patientId));
+        model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
         return "redirect:/note/list";
     }
 
@@ -184,7 +186,7 @@ public class HistoryClientController {
      *
      * @param patientId          Note to be updated or deleted.
      * @param redirectAttributes error message
-     * @return true if the patient is not found, false otherwise.
+     * @return patient if exists, null otherwise
      */
     private PatientBean getPatientIfExists(Integer patientId, RedirectAttributes redirectAttributes) {
         try {
