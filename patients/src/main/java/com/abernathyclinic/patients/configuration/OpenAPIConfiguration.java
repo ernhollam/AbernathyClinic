@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class OpenAPIConfiguration {
 	@Bean
-	public OpenAPI MediscreenOpenAPI() {
+	public OpenAPI MediscreenPatientOpenAPI() {
 		return new OpenAPI()
-				.info(new Info().title("Mediscreen application APIs")
+				.info(new Info().title("Mediscreen ─ Patient API")
 						.description(
 								"""
 										Mediscreen patient management APIs.
