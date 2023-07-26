@@ -6,6 +6,8 @@ import com.abernathyclinic.history.exception.PatientNotFoundException;
 import com.abernathyclinic.history.model.Note;
 import com.abernathyclinic.history.service.NoteService;
 import com.abernathyclinic.history.util.InvalidFormMessageBuilder;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Errors;
@@ -30,40 +32,52 @@ public class NoteController {
     @Autowired
     NoteService noteService;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public Note createNoteForPatient(@Valid @RequestBody Note note, Errors errors) throws PatientNotFoundException, InvalidFormException {
-        validateForm(errors);
-        return noteService.createNote(note);
-    }
+	@Operation(summary = "Creates a patient")
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Note createNoteForPatient(@Valid @RequestBody Note note, Errors errors) throws PatientNotFoundException, InvalidFormException {
+		validateForm(errors);
+		return noteService.createNote(note);
+	}
 
-    @GetMapping("/patient/{patientId}")
-    public List<Note> getPatientHistory(@PathVariable Integer patientId) throws PatientNotFoundException {
-        return noteService.getPatientHistory(patientId);
-    }
+	@Operation(summary = "Gets a patient's history")
+	@GetMapping("/patient/{patientId}")
+	public List<Note> getPatientHistory(
+			@Parameter(description = "id of patient for which history is requested") @PathVariable Integer patientId)
+			throws PatientNotFoundException {
+		return noteService.getPatientHistory(patientId);
+	}
 
-    @GetMapping("/{noteId}")
-    public Note getNoteById(@PathVariable String noteId) throws NoteNotFoundException {
-        return noteService.getNoteById(noteId).orElseThrow(() -> new NoteNotFoundException("Note with ID " + noteId + " was not found"));
-    }
+	@Operation(summary = "Gets a note by its id")
+	@GetMapping("/{noteId}")
+	public Note getNoteById(@Parameter(description = "id of note to be searched") @PathVariable String noteId)
+			throws NoteNotFoundException {
+		return noteService.getNoteById(noteId)
+				.orElseThrow(() -> new NoteNotFoundException("Note with ID " + noteId + " was not found"));
+	}
 
-    @GetMapping
-    public List<Note> getNotes() {
-        return noteService.getNotes();
-    }
+	@Operation(summary = "Get list of notes")
+	@GetMapping
+	public List<Note> getNotes() {
+		return noteService.getNotes();
+	}
 
-    @PutMapping("/{id}")
-    public Note updateNoteById(@PathVariable String id, @Valid @RequestBody Note note, Errors errors)
-            throws NoteNotFoundException, PatientNotFoundException, InvalidFormException {
-        validateForm(errors);
-        return noteService.updateNote(note);
-    }
+	@Operation(summary = "Updates a requested note")
+	@PutMapping("/{id}")
+	public Note updateNoteById(@Parameter(description = "id of patient to be updated") @PathVariable String id,
+			@Valid @RequestBody Note note, Errors errors)
+			throws NoteNotFoundException, PatientNotFoundException, InvalidFormException {
+		validateForm(errors);
+		return noteService.updateNote(note);
+	}
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteNoteById(@PathVariable String id) throws NoteNotFoundException {
-        noteService.deleteNoteById(id);
-    }
+	@Operation(summary = "Removes a requested note")
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteNoteById(@Parameter(description = "id of patient to be deleted") @PathVariable String id)
+			throws NoteNotFoundException {
+		noteService.deleteNoteById(id);
+	}
 
     private void validateForm(Errors errors) throws InvalidFormException {
         if (errors.hasErrors()) {
