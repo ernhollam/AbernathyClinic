@@ -55,6 +55,7 @@ public class HistoryClientController {
 	public String showUpdateNoteForm(@PathVariable("patientId") Integer patientId,
 			@PathVariable("noteId") String noteId, Model model, RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);
+		model.addAttribute("currentPage", "history");
 		if (patient == null) {
 			return "patient/list";
 		}
@@ -62,12 +63,12 @@ public class HistoryClientController {
 		if (note != null) {
 			model.addAttribute("note", note);
 			model.addAttribute("patient", patient);
+			model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 			return "note/update";
 		}
 		// return to patient profile if note was not found
 		redirectAttributes.addFlashAttribute("error", "Note with ID " + noteId + " does not exist.");
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
-		model.addAttribute("currentPage", "history");
 		return "redirect:/note/list";
 	}
 
@@ -99,10 +100,10 @@ public class HistoryClientController {
 		note.setId(noteId);
 		try {
 			historyProxy.updateNote(noteId, note);
-			redirectAttributes.addFlashAttribute("success", "Note " + note.getId() + " was successfully updated.");
+			redirectAttributes.addFlashAttribute("success", "Note '"+ note.getContent()+ "' was successfully updated.");
 		} catch (Exception exception) {
 			redirectAttributes.addFlashAttribute("error",
-					"Error while trying to update note " + note.getId() + ":\n" + exception.getMessage());
+					"Error while trying to update note :\n" + exception.getMessage());
 		}
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("patient", patient);
@@ -149,7 +150,7 @@ public class HistoryClientController {
 			try {
 				historyProxy.createNote(note);
 				redirectAttributes.addFlashAttribute("success",
-						"Note " + note.getContent() + " was successfully created.");
+						"Note '" + note.getContent() + "' was successfully created.");
 				model.addAttribute("notes", patientProxy.getPatients());
 			} catch (Exception exception) {
 				redirectAttributes.addFlashAttribute("error",
@@ -173,7 +174,7 @@ public class HistoryClientController {
 	 * @return list of notes page
 	 */
 	@GetMapping("/patient/{patientId}/patHistory/delete/{noteId}")
-	public String deletePatient(@PathVariable("patientId") Integer patientId, @PathVariable("noteId") String noteId,
+	public String deleteNoteForPatient(@PathVariable("patientId") Integer patientId, @PathVariable("noteId") String noteId,
 			Model model, RedirectAttributes redirectAttributes) {
 		PatientBean patient = getPatientIfExists(patientId, redirectAttributes);
 		if (patient == null) {
@@ -184,7 +185,7 @@ public class HistoryClientController {
 		// and delete the note
 		if (note != null) {
 			historyProxy.deleteNote(noteId);
-			redirectAttributes.addFlashAttribute("success", "Note " + note.getContent() + " was successfully deleted.");
+			redirectAttributes.addFlashAttribute("success", "Note '" + note.getContent() + "' was successfully deleted.");
 			model.addAttribute("patient", patient);
 		} else {
 			redirectAttributes.addFlashAttribute("error", "Note with ID " + noteId + " does not exist.");
