@@ -15,11 +15,15 @@
 <!--Alerts-->
 <div th:insert="fragments :: alert"></div>
 
+<!--Add new note button-->
+<div>
+    <a th:href="@{|/patient/${patient.id}/patHistory/add|}" class="btn text-white float-right" style="background-color: #1a8a9f">Add
+        new note</a>
+</div>
+
 <!--table-->
 <div th:insert="fragments::card_template('Recommandations for ' + ${patient.family} + ' ' + ${patient.given}, ~{:: .form-content})">
-    <!--Search input-->
-    <input class="form-control" id="note-search-input" type="text" placeholder="Search note">
-    <br>
+
     <!--Table-->
     <section class="form-content table-responsive">
         <table class="table table-hover table-condensed">
@@ -36,16 +40,10 @@
                     </div>
                 </td>
             </tr>
-            <tr th:if="${#lists.isEmpty(patHistory)}">
+            <tr th:if="${patHistory.isEmpty()}">
                 <td colspan="9">
                     <div class="alert alert-info text-center">There are no notes yet.
                     </div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="9">
-                    <a th:href="@{|/patient/${patient.id}/patHistory/add|}" class="btn text-white float-right" style="background-color: #1a8a9f">Add
-                        new note</a>
                 </td>
             </tr>
             </tbody>
