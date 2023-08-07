@@ -33,5 +33,150 @@
     "patId": 14,
     "content": "Patient states that Body Height, Body Weight, Cholesterol, Dizziness and Reaction",
     "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 1,
+    "content": "Le patient déclare qu'il « se sent très bien »\r\nPoids égal ou inférieur au poids recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 1,
+    "content": "Le patient déclare qu'il se sent fatigué pendant la journée\r\nIl se plaint également de douleurs musculaires\r\nTests de laboratoire indiquant une microalbumine élevée",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 1,
+    "content": "Le patient déclare qu'il ne se sent pas si fatigué que ça\r\nFumeur, il a arrêté dans les 12 mois précédents\r\nTests de laboratoire indiquant que les anticorps sont élevés",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 2,
+    "content": "Le patient déclare qu'il ressent beaucoup de stress au travail\r\nIl se plaint également que son audition est anormale dernièrement",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 2,
+    "content": "Le patient déclare avoir fait une réaction aux médicaments au cours des 3 derniers mois\r\nIl remarque également que son audition continue d'être anormale",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 2,
+    "content": "Tests de laboratoire indiquant une microalbumine élevée",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 2,
+    "content": "Le patient déclare que tout semble aller bien\r\nLe laboratoire rapporte que l'hémoglobine A1C dépasse le niveau recommandé\r\nLe patient déclare qu’il fume depuis longtemps",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 3,
+    "content": "Le patient déclare qu'il fume depuis peu",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 3,
+    "content": "Tests de laboratoire indiquant une microalbumine élevée",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 3,
+    "content": "Le patient déclare qu'il est fumeur et qu'il a cessé de fumer l'année dernière\r\nIl se plaint également de crises d’apnée respiratoire anormales\r\nTests de laboratoire indiquant un taux de cholestérol LDL élevé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 3,
+    "content": "Tests de laboratoire indiquant un taux de cholestérol LDL élevé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 4,
+    "content": "Le patient déclare qu'il lui est devenu difficile de monter les escaliers\r\nIl se plaint également d’être essoufflé\r\nTests de laboratoire indiquant que les anticorps sont élevés\r\nRéaction aux médicaments",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 4,
+    "content": "Le patient déclare qu'il a mal au dos lorsqu'il reste assis pendant longtemps",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 4,
+    "content": "Le patient déclare avoir commencé à fumer depuis peu\r\nHémoglobine A1C supérieure au niveau recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 5,
+    "content": "Le patient déclare avoir des douleurs au cou occasionnellement\r\nLe patient remarque également que certains aliments ont un goût différent\r\nRéaction apparente aux médicaments\r\nPoids corporel supérieur au poids recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 5,
+    "content": "Le patient déclare avoir eu plusieurs épisodes de vertige depuis la dernière visite.\r\nTaille incluse dans la fourchette concernée",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 5,
+    "content": "Le patient déclare qu'il souffre encore de douleurs cervicales occasionnelles\r\nTests de laboratoire indiquant une microalbumine élevée\r\nFumeur, il a arrêté dans les 12 mois précédents",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 5,
+    "content": "Le patient déclare avoir eu plusieurs épisodes de vertige depuis la dernière visite.\r\nTests de laboratoire indiquant que les anticorps sont élevés",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 6,
+    "content": "Le patient déclare qu'il se sent bien\r\nPoids corporel supérieur au poids recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 6,
+    "content": "Le patient déclare qu'il se sent bien",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 7,
+    "content": "Le patient déclare qu'il se réveille souvent avec une raideur articulaire\r\nIl se plaint également de difficultés pour s’endormir\r\nPoids corporel supérieur au poids recommandé\r\nTests de laboratoire indiquant un taux de cholestérol LDL élevé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 8,
+    "content": "Les tests de laboratoire indiquent que les anticorps sont élevés\r\nHémoglobine A1C supérieure au niveau recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 9,
+    "content": "Le patient déclare avoir de la difficulté à se concentrer sur ses devoirs scolaires\r\nHémoglobine A1C supérieure au niveau recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 9,
+    "content": "Le patient déclare qu'il s’impatiente facilement en cas d’attente prolongée\r\nIl signale également que les produits du distributeur automatique ne sont pas bons\r\nTests de laboratoire signalant des taux anormaux de cellules sanguines",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 9,
+    "content": "Le patient signale qu'il est facilement irrité par des broutilles\r\nIl déclare également que l'aspirateur des voisins fait trop de bruit\r\nTests de laboratoire indiquant que les anticorps sont élevés",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 10,
+    "content": "Le patient déclare qu'il n'a aucun problème",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 10,
+    "content": "Le patient déclare qu'il n'a aucun problème\r\nTaille incluse dans la fourchette concernée\r\nHémoglobine A1C supérieure au niveau recommandé",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 10,
+    "content": "Le patient déclare qu'il n'a aucun problème\r\nPoids corporel supérieur au poids recommandé\r\nLe patient a signalé plusieurs épisodes de vertige depuis sa dernière visite",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 10,
+    "content": "Le patient déclare qu'il n'a aucun problème\r\nTests de laboratoire indiquant une microalbumine élevée",
+    "_class": "com.abernathyclinic.history.model.Note"
   }
 ]
