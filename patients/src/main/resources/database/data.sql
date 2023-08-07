@@ -8,4 +8,9 @@ INSERT INTO patients (family, given, dob, sex, address, phone) VALUES
 ('Wilson', 'Claire', '1966-12-31', 'F', '12 Cobblestone St', '300-452-1091'),
 ('Buckland', 'Max', '1945-06-24', 'M', '193 Vale St', '833-534-0864'),
 ('Clark', 'Natalie', '1964-06-18', 'F', '12 Beechwood Road', '241-467-9197'),
-('Bailey', 'Piers', '1959-06-28', 'M', '1202 Bumble Dr', '747-815-0557');
+('Bailey', 'Piers', '1959-06-28', 'M', '1202 Bumble Dr', '747-815-0557'),
+('TestNone', 'Test', '1966-12-31', 'F', '1 Brookside St', '100-222-3333'),
+('TestBorderline', 'Test', '1945-06-24', 'M', '2 High St', '200-333-4444'),
+('TestInDanger', 'Test', '2004-06-18', 'M', '3 Club Road', '300-444-5555'),
+('TestEarlyOnset', 'Test', '2002-06-28', 'F', '4 Valley Dr', '400-555-6666');
+;
