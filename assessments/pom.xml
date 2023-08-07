@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.abernathyclinic</groupId>
-	<artifactId>reports</artifactId>
+	<artifactId>assessments</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>reports</name>
 	<description>API for report generation</description>

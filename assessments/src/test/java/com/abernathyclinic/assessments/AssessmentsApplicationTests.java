@@ -1,10 +1,10 @@
-package com.abernathyclinic.reports;
+package com.abernathyclinic.assessments;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ReportsApplicationTests {
+class AssessmentsApplicationTests {
 
 	@Test
 	void contextLoads() {

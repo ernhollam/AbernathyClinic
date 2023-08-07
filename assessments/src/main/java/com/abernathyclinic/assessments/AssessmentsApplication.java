@@ -1,13 +1,13 @@
-package com.abernathyclinic.reports;
+package com.abernathyclinic.assessments;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReportsApplication {
+public class AssessmentsApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ReportsApplication.class, args);
+		SpringApplication.run(AssessmentsApplication.class, args);
 	}
 
 }

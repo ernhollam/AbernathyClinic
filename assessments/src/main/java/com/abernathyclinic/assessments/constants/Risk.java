@@ -1,4 +1,4 @@
-package com.abernathyclinic.reports.constants;
+package com.abernathyclinic.assessments.constants;
 
 public enum Risk {
 	NONE,
