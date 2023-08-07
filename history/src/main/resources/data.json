@@ -1,0 +1,37 @@
+[
+  {
+    "patId": 11,
+    "content": "Patient states that they are 'feeling terrific' Weight at or below recommended level",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 12,
+    "content": "Patient states that they are feeling a great deal of stress at work Patient also complains that their hearing seems Abnormal as of late",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 13,
+    "content": "Patient states that they quit within last year Patient also complains that of Abnormal breathing spells Lab reports Cholesterol LDL high",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 14,
+    "content": "Patient states that walking up stairs has become difficult Patient also complains that they are having shortness of breath Lab results indicate Antibodies present elevated Reaction to medication",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 14,
+    "content": "Patient states that they are experiencing back pain when seated for a long time",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 14,
+    "content": "Patient states that they are a short term Smoker Hemoglobin A1C above recommended level",
+    "_class": "com.abernathyclinic.history.model.Note"
+  },
+  {
+    "patId": 14,
+    "content": "Patient states that Body Height, Body Weight, Cholesterol, Dizziness and Reaction",
+    "_class": "com.abernathyclinic.history.model.Note"
+  }
+]
