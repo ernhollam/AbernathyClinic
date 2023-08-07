@@ -9,6 +9,7 @@
           crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/60778dae53.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -43,13 +44,14 @@
                 <td th:text="${patient.phone}">100-200-3000</td>
                 <td>
                     <div class="d-grid gap-2 d-md-block float-right">
-                        <a th:href="@{|/patient/${patient.id}/patHistory/add|}"
-                           class="btn text-white " style="background-color:#5da1b4">Add note</a>
                         <a th:href="@{|/patient/update/${patient.id}|}"
-                           class="btn text-white " style="background-color:#5da1b4">View profile</a>
-
+                           class="btn text-white " style="background-color:#5da1b4"><i class="fa-solid fa-magnifying-glass"></i> View profile</a>
+                        <a th:href="@{|/patient/${patient.id}/patHistory/add|}"
+                           class="btn text-white " style="background-color:#5da1b4"
+                           title="Add note"><i class="fa-solid fa-file-circle-plus"></i></a>
                         <a th:href="@{|/patient/delete/${patient.id}|}"
-                           class="btn text-white " style="background-color:#e96f52">Delete</a>
+                           class="btn text-white " style="background-color:#e96f52"
+                           title="Delete"><i class="fa-solid fa-trash"></i></a>
                     </div>
                 </td>
             </tr>
