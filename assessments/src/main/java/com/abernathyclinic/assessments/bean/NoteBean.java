@@ -19,6 +19,11 @@ public class NoteBean {
 	@NotBlank(message = "Notes/recommendations can not be blank")
 	String  content;
 
+	public NoteBean(Integer patId, String content) {
+		this.patId   = patId;
+		this.content = content;
+	}
+
 	@Override
 	public String toString() {
 		return "{\n" +

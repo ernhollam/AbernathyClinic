@@ -33,6 +33,15 @@ public class PatientBean {
 	@Pattern(regexp = "^([0-9]{3}-[0-9]{3}-[0-9]{4})?$", message = "Phone number must be in 123-456-7890 format")
 	private String    phone;
 
+	public PatientBean(String family, String given, LocalDate dob, String sex, String address, String phone) {
+		this.family  = family;
+		this.given   = given;
+		this.dob     = dob;
+		this.sex     = sex;
+		this.address = address;
+		this.phone   = phone;
+	}
+
 	@Override
 	public String toString() {
 		return "{\n" +
