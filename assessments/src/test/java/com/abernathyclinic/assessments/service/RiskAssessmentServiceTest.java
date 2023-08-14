@@ -2,6 +2,7 @@ package com.abernathyclinic.assessments.service;
 
 import com.abernathyclinic.assessments.bean.NoteBean;
 import com.abernathyclinic.assessments.bean.PatientBean;
+import com.abernathyclinic.assessments.constants.Risk;
 import com.abernathyclinic.assessments.proxy.HistoryProxy;
 import com.abernathyclinic.assessments.proxy.PatientProxy;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -88,6 +90,40 @@ class RiskAssessmentServiceTest {
 
 	@Test
 	void assessPatientRisk() {
+		when(patientProxy.getPatientById(testNone.getId())).thenReturn(testNone);
+		when(patientProxy.getPatientById(testBorderline.getId())).thenReturn(testBorderline);
+		when(patientProxy.getPatientById(testInDanger.getId())).thenReturn(testInDanger);
+		when(patientProxy.getPatientById(testEarlyOnset.getId())).thenReturn(testEarlyOnset);
+
+		when(historyProxy.getPatientHistory(testNone.getId())).thenReturn(testNonesNotes);
+		when(historyProxy.getPatientHistory(testBorderline.getId())).thenReturn(testBorderlinesNotes);
+		when(historyProxy.getPatientHistory(testInDanger.getId())).thenReturn(testInDangersNotes);
+		when(historyProxy.getPatientHistory(testEarlyOnset.getId())).thenReturn(testEarlyOnsetsNotes);
+
+		when(patientProfileService.getAge(testNone.getDob())).thenReturn(57);
+		when(patientProfileService.getAge(testBorderline.getDob())).thenReturn(78);
+		when(patientProfileService.getAge(testInDanger.getDob())).thenReturn(19);
+		when(patientProfileService.getAge(testEarlyOnset.getDob())).thenReturn(21);
+
+		when(patientProfileService.isFemale(testNone.getSex())).thenReturn(true);
+		when(patientProfileService.isFemale(testBorderline.getSex())).thenReturn(false);
+		when(patientProfileService.isFemale(testInDanger.getSex())).thenReturn(false);
+		when(patientProfileService.isFemale(testEarlyOnset.getSex())).thenReturn(true);
+
+		when(patientProfileService.isMale(testNone.getSex())).thenReturn(false);
+		when(patientProfileService.isMale(testBorderline.getSex())).thenReturn(true);
+		when(patientProfileService.isMale(testInDanger.getSex())).thenReturn(true);
+		when(patientProfileService.isMale(testEarlyOnset.getSex())).thenReturn(false);
+
+		when(patientProfileService.isOverAgeLimit(19)).thenReturn(false);
+		when(patientProfileService.isOverAgeLimit(21)).thenReturn(false);
+		when(patientProfileService.isOverAgeLimit(57)).thenReturn(true);
+		when(patientProfileService.isOverAgeLimit(78)).thenReturn(true);
+
+		assertEquals(Risk.NONE, riskAssessmentService.assessPatientRisk(testNone.getId()));
+		assertEquals(Risk.BORDERLINE, riskAssessmentService.assessPatientRisk(testBorderline.getId()));
+		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDanger.getId()));
+		assertEquals(Risk.EARLY_ONSET, riskAssessmentService.assessPatientRisk(testEarlyOnset.getId()));
 	}
 
 	@Test

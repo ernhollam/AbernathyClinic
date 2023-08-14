@@ -39,14 +39,17 @@ public class RiskAssessmentService {
 	/**
 	 * Evaluates risk to develop diabetes according to gender, age and number of triggers found.
 	 *
-	 * @param patientBean patient for which the risk assessment is done
+	 * @param patientId ID of patient for which the risk assessment is done
 	 * @return risk level to develop diabetes
 	 */
-	public Risk assessPatientRisk(PatientBean patientBean) {
+	public Risk assessPatientRisk(Integer patientId) {
+		PatientBean patient = patientProxy.getPatientById(patientId);
 		// get patient traits
-		int     age        = patientProfileService.getAge(patientBean.getDob());
-		long    nbTriggers = countTriggers(historyProxy.getPatientHistory(patientBean.getId()));
-		boolean isFemale   = patientProfileService.isFemale(patientBean.getSex());
+		int     age        = patientProfileService.getAge(patient.getDob());
+		long    nbTriggers = countTriggers(historyProxy.getPatientHistory(patient.getId()));
+		String  sex        = patient.getSex();
+		boolean isFemale   = patientProfileService.isFemale(sex);
+		boolean isMale     = patientProfileService.isMale(sex);
 
 		if (nbTriggers == 0) {
 			return NONE;
@@ -60,7 +63,7 @@ public class RiskAssessmentService {
 			if (isFemale) {
 				if (nbTriggers >= EARLY_ONSET_FEMALE_TRIGGER_COUNT) return EARLY_ONSET;
 				if (nbTriggers >= IN_DANGER_FEMALE_TRIGGER_COUNT) return IN_DANGER;
-			} else {
+			} else if (isMale) {
 				if (nbTriggers >= EARLY_ONSET_MALE_TRIGGER_COUNT) return EARLY_ONSET;
 				if (nbTriggers >= IN_DANGER_MALE_TRIGGER_COUNT) return IN_DANGER;
 			}
