@@ -26,6 +26,7 @@ public class Triggers {
 			"Taille",
 			"Poids",
 			"Fumeur",
+			"Fumeuse",
 			"Anormal",
 			"Cholestérol",
 			"Vertige",
