@@ -7,7 +7,6 @@ import com.abernathyclinic.assessments.constants.Triggers;
 import com.abernathyclinic.assessments.proxy.HistoryProxy;
 import com.abernathyclinic.assessments.proxy.PatientProxy;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +27,17 @@ import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.
 @Service
 @Slf4j
 public class RiskAssessmentService {
-	@Autowired
-	private PatientProxy patientProxy;
-	@Autowired
-	private HistoryProxy historyProxy;
+	private final PatientProxy patientProxy;
+	private final HistoryProxy historyProxy;
 
-	@Autowired
-	private PatientProfileService patientProfileService;
+	private final PatientProfileService patientProfileService;
+
+	public RiskAssessmentService(PatientProxy patientProxy, HistoryProxy historyProxy,
+			PatientProfileService patientProfileService) {
+		this.patientProxy          = patientProxy;
+		this.historyProxy          = historyProxy;
+		this.patientProfileService = patientProfileService;
+	}
 
 	/**
 	 * Evaluates risk to develop diabetes according to gender, age and number of triggers found.

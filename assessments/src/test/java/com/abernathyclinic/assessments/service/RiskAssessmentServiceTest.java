@@ -6,7 +6,6 @@ import com.abernathyclinic.assessments.constants.Risk;
 import com.abernathyclinic.assessments.proxy.HistoryProxy;
 import com.abernathyclinic.assessments.proxy.PatientProxy;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,12 +83,9 @@ class RiskAssessmentServiceTest {
 
 	}
 
-	@BeforeEach
-	void setUp() {
-	}
 
 	@Test
-	void assessPatientRisk() {
+	void assessPatientRiskTest() {
 		when(patientProxy.getPatientById(testNone.getId())).thenReturn(testNone);
 		when(patientProxy.getPatientById(testBorderline.getId())).thenReturn(testBorderline);
 		when(patientProxy.getPatientById(testInDanger.getId())).thenReturn(testInDanger);
@@ -127,7 +123,7 @@ class RiskAssessmentServiceTest {
 	}
 
 	@Test
-	void countTriggers() {
+	void countTriggersTest() {
 		assertEquals(1, riskAssessmentService.countTriggers(testNonesNotes));
 		assertEquals(2, riskAssessmentService.countTriggers(testBorderlinesNotes));
 		assertEquals(3, riskAssessmentService.countTriggers(testInDangersNotes));
