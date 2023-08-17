@@ -3,6 +3,7 @@ package com.abernathyclinic.clientui.controller;
 import com.abernathyclinic.clientui.bean.NoteBean;
 import com.abernathyclinic.clientui.bean.PatientBean;
 import com.abernathyclinic.clientui.exception.PatientNotFoundException;
+import com.abernathyclinic.clientui.proxy.AssessmentProxy;
 import com.abernathyclinic.clientui.proxy.HistoryProxy;
 import com.abernathyclinic.clientui.proxy.PatientProxy;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,11 @@ import javax.validation.Valid;
 @Slf4j
 public class HistoryClientController {
 	@Autowired
-	private PatientProxy patientProxy;
+	private PatientProxy    patientProxy;
 	@Autowired
-	private HistoryProxy historyProxy;
+	private HistoryProxy    historyProxy;
+	@Autowired
+	private AssessmentProxy assessmentProxy;
 
 	/**
 	 * Show list of notes for patient if they exist
@@ -41,6 +44,7 @@ public class HistoryClientController {
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("patient", patient);
 		model.addAttribute("currentPage", "history");
+		model.addAttribute("risk", assessmentProxy.assessPatientRisk(patientId));
 		return "/note/list";
 	}
 

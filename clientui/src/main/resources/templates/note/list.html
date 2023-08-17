@@ -16,11 +16,6 @@
 <!--Alerts-->
 <div th:insert="fragments :: alert"></div>
 
-<!--Add new note button-->
-<div>
-    <a th:href="@{|/patient/${patient.id}/patHistory/add|}" class="btn text-white float-right" style="background-color: #1a8a9f">Add
-        new note</a>
-</div>
 
 <!--table-->
 <div th:insert="fragments::card_template('Recommandations for ' + ${patient.family} + ' ' + ${patient.given}, ~{:: .form-content})">
