@@ -3,6 +3,7 @@ package com.abernathyclinic.assessments.service;
 import com.abernathyclinic.assessments.bean.NoteBean;
 import com.abernathyclinic.assessments.bean.PatientBean;
 import com.abernathyclinic.assessments.constants.Risk;
+import com.abernathyclinic.assessments.exception.PatientNotFoundException;
 import com.abernathyclinic.assessments.proxy.HistoryProxy;
 import com.abernathyclinic.assessments.proxy.PatientProxy;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -83,6 +85,12 @@ class RiskAssessmentServiceTest {
 
 	}
 
+	@Test
+	void assessPatientRisk_throwsPatientNotFoundException() {
+		when(patientProxy.getPatientById(testNone.getId())).thenReturn(null);
+
+		assertThrows(PatientNotFoundException.class, () -> riskAssessmentService.assessPatientRisk(testNone.getId()));
+	}
 
 	@Test
 	void assessPatientRiskTest() {
