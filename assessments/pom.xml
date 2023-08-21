@@ -11,7 +11,7 @@
 	<groupId>com.abernathyclinic</groupId>
 	<artifactId>assessments</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>reports</name>
+	<name>assessments</name>
 	<description>API for report generation</description>
 	<properties>
 		<java.version>17</java.version>
@@ -78,7 +78,69 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.10</version>
+				<configuration>
+					<excludes>
+						<exclude>**/bean/*</exclude>
+						<exclude>**/configuration/*</exclude>
+						<exclude>**/constants/*</exclude>
+						<exclude>**/controller/*</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<!--first execution : for preparing JaCoCo runtime agent-->
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<!--second execution : for creating code coverage reports-->
+						<id>jacoco-report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>3.1.2</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>3.4.5</version>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/bean/*</exclude>
+						<exclude>**/configuration/*</exclude>
+						<exclude>**/constants/*</exclude>
+						<exclude>**/controller/*</exclude>
+					</excludes>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>

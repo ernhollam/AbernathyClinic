@@ -1,0 +1,12 @@
+ID;FAMILY;GIVEN;DOB;SEX;LIST_Of_NOTES;AGE;IS_FEMALE;IS_MALE;IS_OVER_AGE_LIMIT;RISK
+1;Test1;Test1;2013-01-01;M;Taille, Poids;10;false;true;false;NONE
+2;Test2;Test2;1995-01-01;M;Fumeur, anormal, Microalbumine, vertige;28;false;true;false;IN_DANGER
+3;Test3;Test3;2004-01-01;M;Fumeur, anormal, Microalbumine, vertige, rechute;19;false;true;false;EARLY_ONSET
+4;Test4;Test4;2011-01-01;F;taille, poids, réaction;12;true;false;false;NONE
+5;Test5;Test5;2005-01-01;F;taille, poids, réaction, anticorps, vertige, anormal;18;true;false;false;IN_DANGER
+6;Test6;Test6;1994-01-01;F;taille, poids, réaction, anticorps, vertige, anormal, fumeuse, microalbumine;29;true;false;false;EARLY_ONSET
+7;Test7;Test7;1993-01-01;M;sans problème;30;false;true;true;NONE
+8;Test8;Test8;1992-01-01;F;taille, poids, réaction;31;true;false;true;BORDERLINE
+9;Test9;Test9;1991-01-01;F;taille, poids, réaction, anticorps, vertige, anormal, microalbumine;32;true;false;true;IN_DANGER
+10;Test10;Test10;1964-01-01;M;taille, poids, fumeur, anticorps, vertige, anormal, microalbumine, rechute;59;false;true;true;EARLY_ONSET
+11;Test11;Test11;1993-01-01;M;sans problème;30;false;true;true;NONE

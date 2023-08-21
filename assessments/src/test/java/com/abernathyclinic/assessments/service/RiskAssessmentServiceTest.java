@@ -9,6 +9,8 @@ import com.abernathyclinic.assessments.proxy.PatientProxy;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,6 +22,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -40,23 +43,27 @@ class RiskAssessmentServiceTest {
 
 	private PatientBean testNone;
 	private PatientBean testBorderline;
-	private PatientBean testInDanger;
+	private PatientBean testInDangerMale;
+	private PatientBean testInDangerFemale;
 	private PatientBean testEarlyOnset;
 
 	private final List<NoteBean> testNonesNotes       = new ArrayList<>();
 	private final List<NoteBean> testBorderlinesNotes = new ArrayList<>();
 	private final List<NoteBean> testInDangersNotes   = new ArrayList<>();
+	private final List<NoteBean> testInDangerFNotes   = new ArrayList<>();
 	private final List<NoteBean> testEarlyOnsetsNotes = new ArrayList<>();
 
 	@BeforeAll
 	void init() {
-		testNone       = new PatientBean(1, "TestNone", "Test", LocalDate.of(1966, 12, 31), "F", "1 Brookside St",
+		testNone           = new PatientBean(1, "TestNone", "Test", LocalDate.of(1966, 12, 31), "F", "1 Brookside St",
 				"00-222-3333");
-		testBorderline = new PatientBean(2, "TestBorderline", "Test", LocalDate.of(1945, 6, 24), "M", "2 High St",
+		testBorderline     = new PatientBean(2, "TestBorderline", "Test", LocalDate.of(1945, 6, 24), "M", "2 High St",
 				"200-333-444");
-		testInDanger   = new PatientBean(3, "TestInDanger", "Test", LocalDate.of(2004, 6, 18), "M", "3Club Road",
+		testInDangerMale   = new PatientBean(3, "TestInDanger", "TestM", LocalDate.of(2004, 6, 18), "M", "3 Club Road",
 				"300-444-5555");
-		testEarlyOnset = new PatientBean(4, "TestEarlyOnset", "Test", LocalDate.of(2002, 6, 28), "F", "4 Valley Dr",
+		testInDangerFemale = new PatientBean(5, "TestInDanger", "TestF", LocalDate.of(2004, 6, 18), "F", "3 Club Road",
+				"300-444-5555");
+		testEarlyOnset     = new PatientBean(4, "TestEarlyOnset", "Test", LocalDate.of(2002, 6, 28), "F", "4 Valley Dr",
 				"400-555-6666");
 
 		testNonesNotes.add(new NoteBean(1,
@@ -74,6 +81,8 @@ class RiskAssessmentServiceTest {
 				new NoteBean(3,
 						"Le patient déclare qu'il est fumeur et qu'il a cessé de fumer l'année dernière Il se plaint également de crises d’apnée respiratoire anormales Tests de laboratoire indiquant un taux de cholestérol LDL élevé")
 		));
+		testInDangerFNotes.add(
+				new NoteBean(5, "Poids, Taille, Microalbumine, Hémoglobine A1C"));
 		testEarlyOnsetsNotes.addAll(List.of(
 				new NoteBean(4,
 						"Le patient déclare qu'il lui est devenu difficile de monter les escaliers Il se plaint également d’être essoufflé Tests de laboratoire indiquant que les anticorps sont élevés Réaction aux médicaments"),
@@ -92,31 +101,53 @@ class RiskAssessmentServiceTest {
 		assertThrows(PatientNotFoundException.class, () -> riskAssessmentService.assessPatientRisk(testNone.getId()));
 	}
 
+	@ParameterizedTest
+	@CsvFileSource(resources = "/test-data.csv", numLinesToSkip = 1, delimiter = ';')
+	void assessPatientRisk_returnsRightRiskFromCSVFile(int id, String family, String given, LocalDate birthday,
+			String sex, String notes, int age, boolean isFemale, boolean isMale, boolean isOverAgeLimit,
+			Risk risk) {
+		PatientBean testPatient = new PatientBean(id, family, given, birthday, sex, "", "");
+		when(patientProxy.getPatientById(id)).thenReturn(testPatient);
+		when(patientProfileService.getAge(birthday)).thenReturn(age);
+		List<NoteBean> listOfNotes = new ArrayList<>();
+		listOfNotes.add(new NoteBean(id, notes));
+		when(historyProxy.getPatientHistory(id)).thenReturn(listOfNotes);
+		when(patientProfileService.isFemale(anyString())).thenReturn(isFemale);
+		when(patientProfileService.isMale(anyString())).thenReturn(isMale);
+		when(patientProfileService.isOverAgeLimit(age)).thenReturn(isOverAgeLimit);
+		assertEquals(risk, riskAssessmentService.assessPatientRisk(id));
+	}
+
 	@Test
 	void assessPatientRiskTest() {
 		when(patientProxy.getPatientById(testNone.getId())).thenReturn(testNone);
 		when(patientProxy.getPatientById(testBorderline.getId())).thenReturn(testBorderline);
-		when(patientProxy.getPatientById(testInDanger.getId())).thenReturn(testInDanger);
+		when(patientProxy.getPatientById(testInDangerMale.getId())).thenReturn(testInDangerMale);
+		when(patientProxy.getPatientById(testInDangerFemale.getId())).thenReturn(testInDangerFemale);
 		when(patientProxy.getPatientById(testEarlyOnset.getId())).thenReturn(testEarlyOnset);
 
 		when(historyProxy.getPatientHistory(testNone.getId())).thenReturn(testNonesNotes);
 		when(historyProxy.getPatientHistory(testBorderline.getId())).thenReturn(testBorderlinesNotes);
-		when(historyProxy.getPatientHistory(testInDanger.getId())).thenReturn(testInDangersNotes);
+		when(historyProxy.getPatientHistory(testInDangerMale.getId())).thenReturn(testInDangersNotes);
+		when(historyProxy.getPatientHistory(testInDangerFemale.getId())).thenReturn(testInDangerFNotes);
 		when(historyProxy.getPatientHistory(testEarlyOnset.getId())).thenReturn(testEarlyOnsetsNotes);
 
 		when(patientProfileService.getAge(testNone.getDob())).thenReturn(57);
 		when(patientProfileService.getAge(testBorderline.getDob())).thenReturn(78);
-		when(patientProfileService.getAge(testInDanger.getDob())).thenReturn(19);
+		when(patientProfileService.getAge(testInDangerMale.getDob())).thenReturn(19);
+		when(patientProfileService.getAge(testInDangerFemale.getDob())).thenReturn(19);
 		when(patientProfileService.getAge(testEarlyOnset.getDob())).thenReturn(21);
 
 		when(patientProfileService.isFemale(testNone.getSex())).thenReturn(true);
 		when(patientProfileService.isFemale(testBorderline.getSex())).thenReturn(false);
-		when(patientProfileService.isFemale(testInDanger.getSex())).thenReturn(false);
+		when(patientProfileService.isFemale(testInDangerMale.getSex())).thenReturn(false);
+		when(patientProfileService.isFemale(testInDangerFemale.getSex())).thenReturn(true);
 		when(patientProfileService.isFemale(testEarlyOnset.getSex())).thenReturn(true);
 
 		when(patientProfileService.isMale(testNone.getSex())).thenReturn(false);
 		when(patientProfileService.isMale(testBorderline.getSex())).thenReturn(true);
-		when(patientProfileService.isMale(testInDanger.getSex())).thenReturn(true);
+		when(patientProfileService.isMale(testInDangerMale.getSex())).thenReturn(true);
+		when(patientProfileService.isMale(testInDangerFemale.getSex())).thenReturn(false);
 		when(patientProfileService.isMale(testEarlyOnset.getSex())).thenReturn(false);
 
 		when(patientProfileService.isOverAgeLimit(19)).thenReturn(false);
@@ -126,7 +157,8 @@ class RiskAssessmentServiceTest {
 
 		assertEquals(Risk.NONE, riskAssessmentService.assessPatientRisk(testNone.getId()));
 		assertEquals(Risk.BORDERLINE, riskAssessmentService.assessPatientRisk(testBorderline.getId()));
-		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDanger.getId()));
+		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDangerMale.getId()));
+		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDangerFemale.getId()));
 		assertEquals(Risk.EARLY_ONSET, riskAssessmentService.assessPatientRisk(testEarlyOnset.getId()));
 	}
 
