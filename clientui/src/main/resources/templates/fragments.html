@@ -75,7 +75,8 @@
             <div class="row">
                 <div class="col"><h3 th:text="${risk}">Risk level</h3></div>
                 <!--Add new note button-->
-                <div class="col-3 float-right">
+                <div th:unless="${#strings.contains(#httpServletRequest.requestURI, 'update')}"
+                     class="col-3 float-right">
                     <a th:href="@{|/patient/${patient.id}/patHistory/add|}" class="btn text-white float-right" style="background-color: #1a8a9f">Add
                         new note</a>
                 </div>
