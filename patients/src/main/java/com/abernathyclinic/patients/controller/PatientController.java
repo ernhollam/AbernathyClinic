@@ -12,15 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -51,9 +43,16 @@ public class PatientController {
 
 	@Operation(summary = "Gets a patient by their id")
 	@GetMapping("/{id}")
-	public Patient getPatient(@Parameter(description = "id of patient to be searched") @PathVariable String id) {
-		return patientService.getPatientById(Integer.valueOf(id))
+	public Patient getPatientById(@Parameter(description = "id of patient to be searched") @PathVariable Integer id) {
+		return patientService.getPatientById(id)
 				.orElseThrow(() -> new PatientNotFoundException("Patient with the provided ID does not exist."));
+	}
+
+	@Operation(summary = "Gets a patient by their family name")
+	@GetMapping("/familyName")
+	public List<Patient> getPatientByFamilyName(
+			@Parameter(description = "Family name of patient to be searched") @RequestParam String family) {
+		return patientService.getPatientByFamilyName(family);
 	}
 
 	@Operation(summary = "Updates a patient by their id")

@@ -19,13 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @Import(PatientService.class)
@@ -132,5 +128,32 @@ class PatientServiceTest {
         Integer idBeforeDeletion = testNone.getId();
         patientService.deletePatient(testNone);
         assertTrue(patientService.getPatientById(idBeforeDeletion).isEmpty());
+    }
+
+    @Test
+    @DisplayName("Family name should not be null when calling getPatientByFamilyName")
+    void getPatientByFamilyName_whenIDIsNull_shouldThrowException() {
+        assertThrows(IllegalArgumentException.class,
+                () -> patientService.getPatientByFamilyName(null));
+    }
+
+    @Test
+    @DisplayName("getPatientByFamilyName() should return one patient")
+    void getPatientByFamilyName_shouldReturnListOfOnePatient() {
+        when(patientRepository.findByFamily(testNone.getFamily())).thenReturn(List.of(testNone));
+        List<Patient> result = patientService.getPatientByFamilyName(testNone.getFamily());
+        assertFalse(result.isEmpty());
+        assertEquals(testNone.getId(), result.get(0).getId());
+    }
+
+    @Test
+    @DisplayName("getPatientByFamilyName() should return list of two patients with same name")
+    void getPatientByFamilyName_shouldReturnListOfTwoPatients() {
+        testBorderline.setFamily("TestNone");
+        List<Patient> expected = List.of(testNone, testBorderline);
+        when(patientRepository.findByFamily(testNone.getFamily())).thenReturn(expected);
+        List<Patient> result = patientService.getPatientByFamilyName(testNone.getFamily());
+        assertFalse(result.isEmpty());
+        assertTrue(result.containsAll(expected));
     }
 }

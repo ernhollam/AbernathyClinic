@@ -56,6 +56,17 @@ public class PatientService {
         return patientRepository.findById(id);
     }
 
+    /**
+     * Finds a patient given a family name
+     *
+     * @param family Patient's family name.
+     * @return found patient or empty optional.
+     */
+    public List<Patient> getPatientByFamilyName(String family) {
+        Assert.notNull(family, "Patient family name must not be empty. Please provide a name.");
+        return patientRepository.findByFamily(family);
+    }
+
 
     /**
      * Updates a patient.

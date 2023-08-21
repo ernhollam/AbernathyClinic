@@ -6,11 +6,7 @@ import com.abernathyclinic.patients.model.Patient;
 import com.abernathyclinic.patients.repository.PatientRepository;
 import com.abernathyclinic.patients.service.PatientService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,17 +17,15 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +42,7 @@ public class PatientControllerTest {
     PatientRepository repository;
 
     private Patient testNone;
+    private Patient testNone2;
     private List<Patient> patients;
     private ObjectMapper mapper;
 
@@ -59,6 +54,7 @@ public class PatientControllerTest {
     @BeforeEach
     public void setUp() {
         testNone = new Patient(1, "TestNone", "Test", LocalDate.of(1966, 12, 31), "F", "1 Brookside St", "100-222-3333");
+        testNone2 = new Patient(3, "TestNone", "Test2", LocalDate.of(1996, 12, 31), "F", "23 high st", "111-222-3333");
         Patient testBorderline = new Patient(2, "TestBorderline", "Test", LocalDate.of(1945, 6, 24), "M", "2 High St", "200-333-4444");
         patients = List.of(testNone, testBorderline);
     }
@@ -85,6 +81,53 @@ public class PatientControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.family", is("TestNone")));
+    }
+
+    @Test
+    @DisplayName("Get patient by ID throws PatientNotFoundException")
+    public void getPatientById_throwsPatientNotFoundException() throws Exception {
+        when(service.getPatientById(any(Integer.class))).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/patient/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Get patient by family name returns a list of one element")
+    public void getPatientByFamilyName_returnsListOfOneElement() throws Exception {
+        when(service.getPatientByFamilyName(anyString())).thenReturn(List.of(testNone));
+
+        mockMvc.perform(get("/patient/familyName")
+                        .param("family", "TestNone"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].family", is("TestNone")));
+    }
+
+    @Test
+    @DisplayName("Get patient by family name returns a list of two elements")
+    public void getPatientByFamilyName_returnsListOfTwoElements() throws Exception {
+        when(service.getPatientByFamilyName(anyString())).thenReturn(List.of(testNone, testNone2));
+
+        mockMvc.perform(get("/patient/familyName")
+                        .param("family", "TestNone"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].family", is("TestNone")))
+                .andExpect(jsonPath("$[1].family", is("TestNone")));
+    }
+
+    @Test
+    @DisplayName("Get patient by family name returns empty list")
+    public void getPatientByFamilyName_throwsPatientNotFoundException() throws Exception {
+        when(service.getPatientByFamilyName(anyString())).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/patient/familyName")
+                        .param("family", "TestNone"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", is(empty())));
     }
 
     @Test
