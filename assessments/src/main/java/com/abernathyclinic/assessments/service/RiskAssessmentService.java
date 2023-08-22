@@ -11,20 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.abernathyclinic.assessments.constants.Risk.BORDERLINE;
-import static com.abernathyclinic.assessments.constants.Risk.EARLY_ONSET;
-import static com.abernathyclinic.assessments.constants.Risk.IN_DANGER;
-import static com.abernathyclinic.assessments.constants.Risk.NONE;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.BORDERLINE_OVER_AGE_LIMIT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.EARLY_ONSET_FEMALE_TRIGGER_COUNT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.EARLY_ONSET_MALE_TRIGGER_COUNT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.EARLY_ONSET_OVER_AGE_LIMIT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.IN_DANGER_FEMALE_TRIGGER_COUNT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.IN_DANGER_MALE_TRIGGER_COUNT;
-import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.IN_DANGER_OVER_AGE_LIMIT;
+import static com.abernathyclinic.assessments.constants.Risk.*;
+import static com.abernathyclinic.assessments.constants.RiskAssessmentConstants.*;
 
 @Service
 @Slf4j
@@ -37,16 +30,42 @@ public class RiskAssessmentService {
 	private PatientProfileService patientProfileService;
 
 	/**
-	 * Evaluates risk to develop diabetes according to gender, age and number of triggers found.
+	 * Calculates risk given an ID.
 	 *
 	 * @param patientId ID of patient for which the risk assessment is done
 	 * @return risk level to develop diabetes
 	 */
-	public Risk assessPatientRisk(Integer patientId) {
+	public Risk assessPatientRiskById(Integer patientId) {
 		PatientBean patient = patientProxy.getPatientById(patientId);
+		return getRisk(patient);
+	}
+
+	/**
+	 * Calculates risk given a family name.
+	 *
+	 * @param familyName Last name of patient for which the risk assessment is done
+	 * @return risk level to develop diabetes
+	 */
+	public Map<Integer, Risk> assessPatientRiskByFamilyName(String familyName) {
+		List<PatientBean> patients = patientProxy.getPatientByFamilyName(familyName);
+		if (patients.isEmpty()) {
+			throw new PatientNotFoundException("There is no patient with the following name: " + familyName + ".");
+		}
+		HashMap<Integer, Risk> result = new HashMap<>(patients.size());
+		patients.forEach(patient -> result.put(patient.getId(), getRisk(patient)));
+		return result;
+	}
+
+	/**
+	 * Evaluates risk to develop diabetes according to gender, age and number of triggers found.
+	 *
+	 * @param patient Patient for which the risk assessment is done
+	 * @return risk level to develop diabetes
+	 */
+	private Risk getRisk(PatientBean patient) {
 		if (patient == null) {
-			log.error("Patient with the provided ID " + patientId + " was not found");
-			throw new PatientNotFoundException("Patient with the provided ID " + patientId + " was not found");
+			log.error("Patient was not found");
+			throw new PatientNotFoundException("Patient was not found");
 		} else {
 			// get patient traits
 			int     age        = patientProfileService.getAge(patient.getDob());

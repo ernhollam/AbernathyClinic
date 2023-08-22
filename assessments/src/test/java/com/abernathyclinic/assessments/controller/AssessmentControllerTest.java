@@ -67,7 +67,7 @@ class AssessmentControllerTest {
 	@DisplayName("getAssessmentByPatientId returns NONE")
 	void getAssessmentByPatientId_returnsNONE() throws Exception {
 		when(patientProxy.getPatientById(anyInt())).thenReturn(testNone);
-		when(riskAssessmentService.assessPatientRisk(anyInt())).thenReturn(Risk.NONE);
+		when(riskAssessmentService.assessPatientRiskById(anyInt())).thenReturn(Risk.NONE);
 
 		mockMvc.perform(get("/assess/1"))
 				.andDo(print())
@@ -79,7 +79,7 @@ class AssessmentControllerTest {
 	@DisplayName("getAssessmentByPatientId returns BORDERLINE")
 	void getAssessmentByPatientId_returnsBORDERLINE() throws Exception {
 		when(patientProxy.getPatientById(anyInt())).thenReturn(testBorderline);
-		when(riskAssessmentService.assessPatientRisk(anyInt())).thenReturn(Risk.BORDERLINE);
+		when(riskAssessmentService.assessPatientRiskById(anyInt())).thenReturn(Risk.BORDERLINE);
 
 		mockMvc.perform(get("/assess/2"))
 				.andDo(print())
@@ -91,7 +91,7 @@ class AssessmentControllerTest {
 	@DisplayName("getAssessmentByPatientId returns IN_DANGER")
 	void getAssessmentByPatientId_returnsIN_DANGER() throws Exception {
 		when(patientProxy.getPatientById(anyInt())).thenReturn(testInDanger);
-		when(riskAssessmentService.assessPatientRisk(anyInt())).thenReturn(Risk.IN_DANGER);
+		when(riskAssessmentService.assessPatientRiskById(anyInt())).thenReturn(Risk.IN_DANGER);
 
 		mockMvc.perform(get("/assess/3"))
 				.andDo(print())
@@ -103,7 +103,7 @@ class AssessmentControllerTest {
 	@DisplayName("getAssessmentByPatientId returns EARLY_ONSET")
 	void getAssessmentByPatientId_returnsEARLY_ONSET() throws Exception {
 		when(patientProxy.getPatientById(anyInt())).thenReturn(testEarlyOnset);
-		when(riskAssessmentService.assessPatientRisk(anyInt())).thenReturn(Risk.EARLY_ONSET);
+		when(riskAssessmentService.assessPatientRiskById(anyInt())).thenReturn(Risk.EARLY_ONSET);
 
 		mockMvc.perform(get("/assess/4"))
 				.andDo(print())

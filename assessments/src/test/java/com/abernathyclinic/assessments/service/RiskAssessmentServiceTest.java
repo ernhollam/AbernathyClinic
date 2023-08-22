@@ -98,12 +98,13 @@ class RiskAssessmentServiceTest {
 	void assessPatientRisk_throwsPatientNotFoundException() {
 		when(patientProxy.getPatientById(testNone.getId())).thenReturn(null);
 
-		assertThrows(PatientNotFoundException.class, () -> riskAssessmentService.assessPatientRisk(testNone.getId()));
+		assertThrows(PatientNotFoundException.class,
+				() -> riskAssessmentService.assessPatientRiskById(testNone.getId()));
 	}
 
 	@ParameterizedTest
 	@CsvFileSource(resources = "/test-data.csv", numLinesToSkip = 1, delimiter = ';')
-	void assessPatientRisk_returnsRightRiskFromCSVFile(int id, String family, String given, LocalDate birthday,
+	void assessPatientRiskById_returnsRightRiskFromCSVFile(int id, String family, String given, LocalDate birthday,
 			String sex, String notes, int age, boolean isFemale, boolean isMale, boolean isOverAgeLimit,
 			Risk risk) {
 		PatientBean testPatient = new PatientBean(id, family, given, birthday, sex, "", "");
@@ -115,7 +116,7 @@ class RiskAssessmentServiceTest {
 		when(patientProfileService.isFemale(anyString())).thenReturn(isFemale);
 		when(patientProfileService.isMale(anyString())).thenReturn(isMale);
 		when(patientProfileService.isOverAgeLimit(age)).thenReturn(isOverAgeLimit);
-		assertEquals(risk, riskAssessmentService.assessPatientRisk(id));
+		assertEquals(risk, riskAssessmentService.assessPatientRiskById(id));
 	}
 
 	@Test
@@ -155,11 +156,11 @@ class RiskAssessmentServiceTest {
 		when(patientProfileService.isOverAgeLimit(57)).thenReturn(true);
 		when(patientProfileService.isOverAgeLimit(78)).thenReturn(true);
 
-		assertEquals(Risk.NONE, riskAssessmentService.assessPatientRisk(testNone.getId()));
-		assertEquals(Risk.BORDERLINE, riskAssessmentService.assessPatientRisk(testBorderline.getId()));
-		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDangerMale.getId()));
-		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRisk(testInDangerFemale.getId()));
-		assertEquals(Risk.EARLY_ONSET, riskAssessmentService.assessPatientRisk(testEarlyOnset.getId()));
+		assertEquals(Risk.NONE, riskAssessmentService.assessPatientRiskById(testNone.getId()));
+		assertEquals(Risk.BORDERLINE, riskAssessmentService.assessPatientRiskById(testBorderline.getId()));
+		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRiskById(testInDangerMale.getId()));
+		assertEquals(Risk.IN_DANGER, riskAssessmentService.assessPatientRiskById(testInDangerFemale.getId()));
+		assertEquals(Risk.EARLY_ONSET, riskAssessmentService.assessPatientRiskById(testEarlyOnset.getId()));
 	}
 
 	@Test
