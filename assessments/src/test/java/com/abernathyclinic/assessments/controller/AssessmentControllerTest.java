@@ -16,9 +16,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -109,5 +114,68 @@ class AssessmentControllerTest {
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$", is(Risk.EARLY_ONSET.getValue())));
+	}
+
+	@Test
+	@DisplayName("getAssessmentByPatientFamilyName returns NONE")
+	void getAssessmentByPatientFamilyName_returnsNONE() throws Exception {
+		Map<Integer, Risk> expected = new HashMap<>(1);
+		expected.put(testNone.getId(), Risk.NONE);
+		when(patientProxy.getPatientByFamilyName(anyString())).thenReturn(List.of(testNone));
+		when(riskAssessmentService.assessPatientRiskByFamilyName(anyString())).thenReturn(expected);
+
+		mockMvc.perform(get("/assess/familyName")
+						.param("familyName", "TestNone"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasEntry(String.valueOf(testNone.getId()), String.valueOf(Risk.NONE))));
+	}
+
+	@Test
+	@DisplayName("getAssessmentByPatientFamilyName returns BORDERLINE")
+	void getAssessmentByPatientFamilyName_returnsBORDERLINE() throws Exception {
+		Map<Integer, Risk> expected = new HashMap<>(1);
+		expected.put(testBorderline.getId(), Risk.BORDERLINE);
+		when(patientProxy.getPatientByFamilyName(anyString())).thenReturn(List.of(testBorderline));
+		when(riskAssessmentService.assessPatientRiskByFamilyName(anyString())).thenReturn(expected);
+
+		mockMvc.perform(get("/assess/familyName")
+						.param("familyName", "TestBorderline"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$",
+						hasEntry(String.valueOf(testBorderline.getId()), String.valueOf(Risk.BORDERLINE))));
+	}
+
+	@Test
+	@DisplayName("getAssessmentByPatientFamilyName returns IN_DANGER")
+	void getAssessmentByPatientFamilyName_returnsIN_DANGER() throws Exception {
+		Map<Integer, Risk> expected = new HashMap<>(1);
+		expected.put(testInDanger.getId(), Risk.IN_DANGER);
+		when(patientProxy.getPatientByFamilyName(anyString())).thenReturn(List.of(testInDanger));
+		when(riskAssessmentService.assessPatientRiskByFamilyName(anyString())).thenReturn(expected);
+
+		mockMvc.perform(get("/assess/familyName")
+						.param("familyName", "TestInDanger"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(
+						jsonPath("$", hasEntry(String.valueOf(testInDanger.getId()), String.valueOf(Risk.IN_DANGER))));
+	}
+
+	@Test
+	@DisplayName("getAssessmentByPatientFamilyName returns EARLY_ONSET")
+	void getAssessmentByPatientFamilyName_returnsEARLY_ONSET() throws Exception {
+		Map<Integer, Risk> expected = new HashMap<>(1);
+		expected.put(testEarlyOnset.getId(), Risk.EARLY_ONSET);
+		when(patientProxy.getPatientByFamilyName(anyString())).thenReturn(List.of(testEarlyOnset));
+		when(riskAssessmentService.assessPatientRiskByFamilyName(anyString())).thenReturn(expected);
+
+		mockMvc.perform(get("/assess/familyName")
+						.param("familyName", "TestEarlyOnset"))
+				.andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$",
+						hasEntry(String.valueOf(testEarlyOnset.getId()), String.valueOf(Risk.EARLY_ONSET))));
 	}
 }
