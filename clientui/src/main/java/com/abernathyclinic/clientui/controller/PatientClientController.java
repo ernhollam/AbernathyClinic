@@ -39,7 +39,7 @@ public class PatientClientController {
 		model.addAttribute("patients", patientProxy.getPatients());
 		model.addAttribute("currentPage", "profile");
 		model.addAttribute("disableHistoryTab", true);
-		return "/patient/list";
+		return "patient/list";
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class PatientClientController {
 		}
 		redirectAttributes.addFlashAttribute("error", "Patient with ID " + id + " does not exist.");
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(id));
-		return "redirect:/patient/list";
+		return "redirect:patient/list";
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class PatientClientController {
 		}
 		model.addAttribute("patients", patientProxy.getPatients());
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(id));
-		return "redirect:/patient/list";
+		return "redirect:patient/list";
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class PatientClientController {
 			}
 			// redirect to list of patients page
 			model.addAttribute("currentPage", "profile");
-			return "redirect:/patient/list";
+			return "redirect:patient/list";
 		}
 		return "patient/add";
 	}
@@ -166,7 +166,7 @@ public class PatientClientController {
 		model.addAttribute("patients", patientProxy.getPatients());
 		model.addAttribute("currentPage", "profile");
 		model.addAttribute("disableHistoryTab", false);
-		return "redirect:/patient/list";
+		return "redirect:patient/list";
 	}
 
 }

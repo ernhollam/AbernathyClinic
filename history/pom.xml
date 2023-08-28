@@ -94,7 +94,9 @@
 				<version>0.8.10</version>
 				<configuration>
 					<excludes>
+						<exclude>**/bean/*</exclude>
 						<exclude>**/configuration/*</exclude>
+						<exclude>**/constants/*</exclude>
 						<exclude>**/controller/*</exclude>
 					</excludes>
 				</configuration>

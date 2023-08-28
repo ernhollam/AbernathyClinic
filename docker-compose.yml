@@ -1,0 +1,100 @@
+services:
+  ms-patients:
+    image: ms-patients:latest
+    container_name: ms-patients
+    restart: always
+    depends_on:
+      - mysqldb
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:mysql://mysqldb:3306/abernathy_clinic"
+      - "SPRING_DATASOURCE_USERNAME=root"
+      - "SPRING_DATASOURCE_PASSWORD=rootroot"
+    ports:
+      - "8081:8081"
+    networks:
+      - mediscreen
+
+  mysqldb:
+    image: mysql:latest
+    container_name: mysqldb
+    restart: always
+    environment:
+      - "MYSQL_ROOT_PASSWORD=rootroot"
+      - "MYSQL_DATABASE=abernathy_clinic"
+    volumes:
+      - /patients/src/main/resources/database/initDb.sql:/docker/entrypoint-initdb.d/initDb.sql
+    ports:
+      - "3307:3306"
+    networks:
+      - mediscreen
+
+
+  ms-history:
+    image: ms-history:latest
+    container_name: ms-history
+    restart: always
+    depends_on:
+      - mongodb
+      - ms-patients
+    environment:
+      - "PATIENTS_URL=ms-patients:8081"
+      - "SPRING_DATA_MONGODB_HOST=mongodb"
+      - "SPRING_DATA_MONGODB_PORT=27017"
+      - "SPRING_DATA_MONGODB_DATABASE=mediscreen"
+    ports:
+      - "8082:8082"
+    networks:
+      - mediscreen
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      - "MONGO_INITDB_DATABASE=mediscreen"
+    volumes:
+      - /history/src/main/resources/data.json:/docker/entrypoint-initdb.d/data.json
+    ports:
+      - "27017:27017"
+    networks:
+      - mediscreen
+
+
+  ms-assessments:
+    image: ms-assessments:latest
+    container_name: ms-assessments
+    restart: always
+    depends_on:
+      - ms-patients
+      - ms-history
+    environment:
+      - "PATIENTS_URL=ms-patients:8081"
+      - "HISTORY_URL=ms-history:8082"
+    ports:
+      - "8083:8083"
+    networks:
+      - mediscreen
+
+
+  ms-clientui:
+    image: ms-clientui:latest
+    container_name: ms-clientui
+    restart: always
+    depends_on:
+      - ms-patients
+      - ms-history
+      - ms-assessments
+    environment:
+      - "PATIENTS_URL=ms-patients:8081"
+      - "HISTORY_URL=ms-history:8082"
+      - "ASSESSMENTS_URL=ms-assessments:8083"
+    ports:
+      - "8080:8080"
+    networks:
+      - mediscreen
+
+
+
+networks:
+  mediscreen:
+    driver: bridge

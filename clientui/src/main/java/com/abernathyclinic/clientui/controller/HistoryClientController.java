@@ -45,7 +45,7 @@ public class HistoryClientController {
 		model.addAttribute("patient", patient);
 		model.addAttribute("currentPage", "history");
 		model.addAttribute("risk", assessmentProxy.assessPatientRisk(patientId));
-		return "/note/list";
+		return "note/list";
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class HistoryClientController {
 		// return to patient profile if note was not found
 		redirectAttributes.addFlashAttribute("error", "Note with ID " + noteId + " does not exist.");
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
-		return "redirect:/note/list";
+		return "redirect:note/list";
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class HistoryClientController {
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("patient", patient);
 		model.addAttribute("currentPage", "history");
-		return "redirect:/patient/" + patient.getId() + "/patHistory";
+		return "redirect:patient/" + patient.getId() + "/patHistory";
 	}
 
 	/**
@@ -164,7 +164,7 @@ public class HistoryClientController {
 			model.addAttribute("patient", patient);
 			model.addAttribute("currentPage", "history");
 			// redirect to list of notes page
-			return "redirect:/patient/" + patient.getId() + "/patHistory";
+			return "redirect:patient/" + patient.getId() + "/patHistory";
 		}
 		return "note/add";
 	}
@@ -197,7 +197,7 @@ public class HistoryClientController {
 		// return to NoteBean list
 		model.addAttribute("patHistory", historyProxy.getPatientHistory(patientId));
 		model.addAttribute("currentPage", "history");
-		return "redirect:/patient/" + patient.getId() + "/patHistory";
+		return "redirect:patient/" + patient.getId() + "/patHistory";
 	}
 
 	/**
