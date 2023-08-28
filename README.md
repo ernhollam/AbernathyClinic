@@ -10,14 +10,14 @@ the app.
 Those microservices are:
 
 - patients: manage your patients information
-- history: add practitioner' notes about a patient
-- assessment: assess the patient's risk of developing diabetes
+- history: add practitioner's notes about a patient
+- assessments: assess the patient's risk of developing diabetes
 - clientui: web interface
 
 The documentation of each API will be available in their readme file. The final documentation can be found
 under [documentation](documentation/api-documentation.pdf).
-Once the microservices are running the documentation can be view if you visit the link http://localhost:
-port/swagger-ui/index.html where `port` is the port you chose for your microservice.
+Once the microservices are running the documentation can be view if you visit the
+link http://localhost:0101/swagger-ui/index.html where `0101` is the port you chose for your microservice.
 
 ## Getting started
 
@@ -34,12 +34,14 @@ port/swagger-ui/index.html where `port` is the port you chose for your microserv
 
 ### Running the application with Docker
 
-Dockerfiles are available at the root folder of each microservice, thus you can either build the images or pull them
+Dockerfiles are available at the root folder of each microservice, thus you can either build the images (you must
+run `mvn clean package` to generate the jar files prior to the build) or pull them
 from the Docker Hub.
 
 #### Get the application
 
 Clone the repository at https://github.com/ernhollam/Mediscreen
+
 `git clone https://github.com/ernhollam/Mediscreen`
 
 #### Build jar files
@@ -57,12 +59,13 @@ In Docker Desktop, you should now have six containers running (ms-patients, ms-h
 mongodb and mysqldb).
 
 To view the frontend, expand the app stack in Containers and select the link to `localhost:8080`⁠.
-Add some patients and notes in the frontend. Notice that the risk assessment is available above patient's history note.
+Add some patients and notes in the frontend. Notice that the risk assessment is available above patient's history of
+notes.
 You don't need to do the assessment, it is done dynamically everytime you refresh the page or add a new note.
 
 ## Test coverage
 
-The coverage rate is 91% for the application. Most of the tests are made on the service and controller layers.
+The coverage rate is about 91% for the application. Most of the tests are made on the service and controller layers.
 
 ### Patients
 
