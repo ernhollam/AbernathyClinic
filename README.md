@@ -14,8 +14,7 @@ Those microservices are:
 - assessments: assess the patient's risk of developing diabetes
 - clientui: web interface
 
-The documentation of each API will be available in their readme file. The final documentation can be found
-under [documentation](documentation/api-documentation.pdf).
+The final documentation can be found under [documentation](documentation/api-documentation.pdf).
 Once the microservices are running the documentation can be view if you visit the
 link http://localhost:0101/swagger-ui/index.html where `0101` is the port you chose for your microservice.
 
