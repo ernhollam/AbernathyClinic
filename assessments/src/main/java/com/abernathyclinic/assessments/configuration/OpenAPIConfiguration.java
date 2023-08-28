@@ -17,7 +17,7 @@ public class OpenAPIConfiguration {
 								"""
 										Mediscreen assessment API.
 										Source code is available on [GitHub](https://github.com/ernhollam/Mediscreen)
-										Mediscreen is a web application which allows doctors and practicians from your healthcare facility to manage patients database and their history with all the recommandations or notes.
+										Mediscreen is a web application which allows doctors and practitioners from your healthcare facility to manage patients database and their history with all the recommandations or notes.
 										This information is then to be used to generate a report on the risk of a patient to develop diabetes.""")
 						.license(new License().name("Creative Commons")
 								.url("http://creativecommons.org/licenses/by/4.0/"))
