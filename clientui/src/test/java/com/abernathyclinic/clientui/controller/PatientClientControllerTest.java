@@ -23,7 +23,10 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @WebMvcTest(controllers = PatientClientController.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -78,7 +81,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("success"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -94,7 +97,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("error"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -120,7 +123,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("error"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -136,7 +139,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("success"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -152,7 +155,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("error"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -165,7 +168,7 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("success"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 
     @Test
@@ -178,6 +181,6 @@ class PatientClientControllerTest {
                 .andDo(print())
                 .andExpect(status().is3xxRedirection())
                 .andExpect(flash().attributeExists("error"))
-                .andExpect(view().name("redirect:patient/list"));
+                .andExpect(view().name("redirect:/patient/list"));
     }
 }
